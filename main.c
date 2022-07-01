@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdint.h>
 
 int compute_private_exponent(int E, int P, int Q) {
     // Compute the modular multiplicative inverse of e mod lcm(p-1, q-1)
@@ -17,7 +18,7 @@ int decrypt_cyphertext(int C, int D, int N) {
 }
 
 int main() {
-    int P, Q, N, E, D;
+    uint64_t P, Q, N, E, D;
     int input_plaintext, cyphertext, decrypted_plaintext;
 
     P = 61;
