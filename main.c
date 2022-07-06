@@ -7,7 +7,8 @@ uint64_t compute_private_exponent(uint64_t E, uint64_t P, uint64_t Q)
     // Calcuate D such that:
     // D*E = 1 mod [(P-1)(Q-1)]
     uint64_t M = (P-1) * (Q-1);
-    for (int D = 1; D < M; D++)
+    uint64_t D;
+    for (D = 1; D < M; D++)
     {
         if (((E % M) * (D % M)) % M == 1 )
         {
