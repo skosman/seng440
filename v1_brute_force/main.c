@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdint.h>
-#include <math.h>
+#include <assert.h>
 
 uint64_t compute_private_exponent(uint64_t E, uint64_t P, uint64_t Q) 
 {
@@ -16,38 +16,33 @@ uint64_t compute_private_exponent(uint64_t E, uint64_t P, uint64_t Q)
     }
 }
 
-int encrypt_plaintext(uint64_t T, uint64_t E, uint64_t N) 
+uint64_t calculate_modular_exponentiation(uint64_t base, uint64_t exponent, uint64_t modulus)
 {
-    // Encrypt plaintext and compute the cyphertext
-    // We calculate cypher text C = T^E mod N with multiply-and-square algorithm
-    uint64_t C = 1;
-    while (E != 0) {
-        if (E & 0x01) {
-            C = (C * T) % N;
+    // We calculate modular exponentiation with multiply-and-square algorithm
+    uint64_t R = 1;
+    while (exponent != 0)
+    {
+        if (exponent & 0x01)
+        {
+            R = (R * base) % modulus;
         }
 
-        T = (T * T) % N;
-        E >>=1;
+        base = (base * base) % modulus;
+        exponent >>=1;
     }
-    
-    return C;
+    return R;
 }
 
-int decrypt_cyphertext(uint64_t C, uint64_t D, uint64_t N) 
+uint64_t encrypt_plaintext(uint64_t T, uint64_t E, uint64_t N) 
+{
+    // Encrypt plaintext and compute the cyphertext
+    return calculate_modular_exponentiation(T, E, N);
+}
+
+uint64_t decrypt_cyphertext(uint64_t C, uint64_t D, uint64_t N) 
 {
     // Decrypt cyphertext and compute plaintext
-    // We calculate plain text T = C^D mod N with multiply-and-square algorithm
-    uint64_t T = 1;
-    while (D != 0) {
-        if (D & 0x01) {
-            T = (T * C) % N;
-        }
-
-        C = (C * C) % N;
-        D >>=1;
-    }
-
-    return T;
+    return calculate_modular_exponentiation(C, D, N);
 }
 
 int main() 
@@ -83,11 +78,17 @@ int main()
     printf("The public key is (N,E) = (%lu,%lu)\n", N, E);
     printf("The private key is (N,D) = (%lu,%lu)\n", N, D);
 
-    // Encrypt plaintext
+    // Encrypt plaintext (should equal 855)
     cyphertext = encrypt_plaintext(input_plaintext, E, N);
     printf("Computed cypher text: %lu\n", cyphertext);
 
-    // Decrypt cyphertext
+    // Decrypt cyphertext (should equal 123)
     decrypted_plaintext = decrypt_cyphertext(cyphertext, D, N);
     printf("Computed plain text: %lu\n", decrypted_plaintext);
+
+    // Final assertions that calculations were correct
+    assert(cyphertext == 855);
+    assert(decrypted_plaintext == 123);
+
+    return 0;
 }
