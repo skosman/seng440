@@ -120,23 +120,23 @@ int main()
     // Calculate private exponent
     D = compute_private_exponent(E, P, Q);
 
-    printf("P: %lu, Q: %lu, N=P*Q: %lu\n", P, Q, N);
-    printf("P-1: %lu, Q-1: %lu, (P-1)(Q-1): %lu\n", P-1, Q-1, (P-1)*(Q-1));
-    printf("E (coprime to (P-1)(Q-1)): %lu\n", E);
-    printf("Private exponent D: %lu\n", D);
+    printf("P: %llu, Q: %llu, N=P*Q: %llu\n", P, Q, N);
+    printf("P-1: %llu, Q-1: %llu, (P-1)(Q-1): %llu\n", P-1, Q-1, (P-1)*(Q-1));
+    printf("E (coprime to (P-1)(Q-1)): %llu\n", E);
+    printf("Private exponent D: %llu\n", D);
     printf("D*E = 1 mod [(P-1)(Q-1)] is satisfied\n\n");
 
-    printf("The public key is (N,E) = (%lu,%lu)\n", N, E);
-    printf("The private key is (N,D) = (%lu,%lu)\n", N, D);
+    printf("The public key is (N,E) = (%llu,%llu)\n", N, E);
+    printf("The private key is (N,D) = (%llu,%llu)\n", N, D);
 
 
     // Encrypt plaintext (should equal 855)
     cyphertext = encrypt_plaintext(input_plaintext, E, N);
-    printf("Computed cypher text: %lu\n", cyphertext);
+    printf("Computed cypher text: %llu\n", cyphertext);
 
     // Decrypt cyphertext (should equal 123)
     decrypted_plaintext = decrypt_cyphertext(cyphertext, D, N);
-    printf("Computed plain text: %lu\n", decrypted_plaintext);
+    printf("Computed plain text: %llu\n", decrypted_plaintext);
 
     // Final assertions that calculations were correct
     assert(cyphertext == 855);

@@ -9,7 +9,8 @@ uint64_t compute_private_exponent(uint64_t E, uint64_t P, uint64_t Q)
     // Calcuate D such that:
     // D*E = 1 mod [(P-1)(Q-1)]
     uint64_t M = (P-1) * (Q-1);
-    for (int D = 1; D < M; D++)
+    uint64_t D;
+    for (D = 1; D < M; D++)
     {
         if (((E % M) * (D % M)) % M == 1 )
         {
@@ -84,7 +85,6 @@ int main()
     //Q = 48809;
     P = 61;
     Q = 53;
-
     N = P*Q;
 
     // 17 is a coprime to 3,459,413,424, for example. Found from https://www.mathsisfun.com/numbers/coprime-calculator.html 
@@ -96,14 +96,14 @@ int main()
     // Calculate private exponent
     D = compute_private_exponent(E, P, Q);
 
-    printf("P: %lu, Q: %lu, N=P*Q: %lu\n", P, Q, N);
-    printf("P-1: %lu, Q-1: %lu, (P-1)(Q-1): %lu\n", P-1, Q-1, (P-1)*(Q-1));
-    printf("E (coprime to (P-1)(Q-1)): %lu\n", E);
-    printf("Private exponent D: %lu\n", D);
+    printf("P: %llu, Q: %llu, N=P*Q: %llu\n", P, Q, N);
+    printf("P-1: %llu, Q-1: %llu, (P-1)(Q-1): %llu\n", P-1, Q-1, (P-1)*(Q-1));
+    printf("E (coprime to (P-1)(Q-1)): %llu\n", E);
+    printf("Private exponent D: %llu\n", D);
     printf("D*E = 1 mod [(P-1)(Q-1)] is satisfied\n\n");
 
-    printf("The public key is (N,E) = (%lu,%lu)\n", N, E);
-    printf("The private key is (N,D) = (%lu,%lu)\n", N, D);
+    printf("The public key is (N,E) = (%llu,%llu)\n", N, E);
+    printf("The private key is (N,D) = (%llu,%llu)\n", N, D);
 
     // Compute an array which corresponds to the powers of two of the public key exponent.
     // E.g.) 34 = 2^1 + 2^5, so returned array is [1, 5].
@@ -128,11 +128,14 @@ int main()
 
     // Encrypt the plain text with the lookup table (should equal 855)
     cyphertext = encrypt_plaintext(powers_of_two_public_exponent, num_of_powers_public_key, lookup_table_encrypt, MAX_LUT_POWER, N);
+    printf("Computer cypher text: %llu\n", cyphertext);
     assert(cyphertext == 855);
 
     // Decrypt cyphertext with the lookup table
     decrypted_plaintext = decrypt_cyphertext(powers_of_two_private_exponent, num_of_powers_private_key, lookup_table_decrypt, MAX_LUT_POWER, N);
-    // Final assertions that calculations were correct
+    printf("Computed plain text: %llu\n", decrypted_plaintext);
+
+    // Final assertion that calculations were correct
     assert(decrypted_plaintext == 123);   
 
     return 0;
