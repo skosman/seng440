@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include <assert.h>
 
+#define TEST_ITERATIONS 10000000
 #define MAX_LUT_POWER 12 // corresponds to 2^12 = 4096
 
 uint64_t compute_modular_exponentiation_with_lut(uint64_t *pow_of_two, uint64_t pow_of_two_len, uint64_t *lut, uint64_t lut_len, uint64_t modulus)
@@ -11,7 +12,7 @@ uint64_t compute_modular_exponentiation_with_lut(uint64_t *pow_of_two, uint64_t 
     {
         result = (result * lut[pow_of_two[i]]) % modulus;
     }
-    return result;    
+    return result;
 }
 
 uint64_t encrypt_plaintext(uint64_t *pow_of_two, uint64_t pow_of_two_len, uint64_t *lut, uint64_t lut_len, uint64_t modulus) 
@@ -56,6 +57,27 @@ void compute_lookup_table(uint64_t base, uint64_t modulus, uint64_t *lookup_tabl
     for (i = 1; i < lookup_table_len; i++)
     {
         lookup_table[i] = (lookup_table[i-1] * lookup_table[i-1]) % modulus;
+    }
+}
+
+void loop_encrypt_decrypt_routine(uint64_t *powers_of_two_public_exponent, uint64_t *powers_of_two_private_exponent, uint64_t num_of_powers_public_key, uint64_t num_of_powers_private_key, uint64_t *lookup_table_encrypt, uint64_t *lookup_table_decrypt, uint64_t N)
+{
+    uint64_t cyphertext, decrypted_plaintext;
+
+    uint64_t i;
+    for (i = 0; i < TEST_ITERATIONS; i++) 
+    {
+        // Encrypt the plain text with the lookup table (should equal 855)
+        cyphertext = encrypt_plaintext(powers_of_two_public_exponent, num_of_powers_public_key, lookup_table_encrypt, MAX_LUT_POWER, N);
+        //printf("Computed cypher text: %llu\n", cyphertext);
+        assert(cyphertext == 855);
+
+        // Decrypt cyphertext with the lookup table
+        decrypted_plaintext = decrypt_cyphertext(powers_of_two_private_exponent, num_of_powers_private_key, lookup_table_decrypt, MAX_LUT_POWER, N);
+        //printf("Computed plain text: %llu\n", decrypted_plaintext);
+
+        // Final assertion that calculations were correct
+        assert(decrypted_plaintext == 123);   
     }
 }
 
@@ -109,17 +131,8 @@ int main()
     uint64_t lookup_table_decrypt[MAX_LUT_POWER];
     compute_lookup_table(855, N, lookup_table_decrypt, MAX_LUT_POWER);
 
-    // Encrypt the plain text with the lookup table (should equal 855)
-    cyphertext = encrypt_plaintext(powers_of_two_public_exponent, num_of_powers_public_key, lookup_table_encrypt, MAX_LUT_POWER, N);
-    printf("Computed cypher text: %llu\n", cyphertext);
-    assert(cyphertext == 855);
-
-    // Decrypt cyphertext with the lookup table
-    decrypted_plaintext = decrypt_cyphertext(powers_of_two_private_exponent, num_of_powers_private_key, lookup_table_decrypt, MAX_LUT_POWER, N);
-    printf("Computed plain text: %llu\n", decrypted_plaintext);
-
-    // Final assertion that calculations were correct
-    assert(decrypted_plaintext == 123);   
+    // Run the encryption and decryption cycle multiple times to capture more accurate results
+    loop_encrypt_decrypt_routine(powers_of_two_public_exponent, powers_of_two_private_exponent, num_of_powers_public_key, num_of_powers_private_key, lookup_table_encrypt, lookup_table_decrypt, N);
 
     return 0;
 }

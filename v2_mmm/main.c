@@ -2,6 +2,8 @@
 #include <stdint.h>
 #include <assert.h>
 
+#define TEST_ITERATIONS 10000000
+
 uint64_t get_num_bits(uint64_t num) 
 {
     register uint64_t i = 0;
@@ -81,6 +83,26 @@ uint64_t decrypt_cyphertext(uint64_t C, uint64_t D, uint64_t N)
   return multiply_and_square(C, D, N);
 }
 
+void loop_encrypt_decrypt_routine(uint64_t T, uint64_t E, uint64_t D, uint64_t N)
+{
+    uint64_t cyphertext, decrypted_plaintext;
+
+    uint64_t i;
+    for (i = 0; i < TEST_ITERATIONS; i++) 
+    {
+        // Encrypt plaintext (should equal 855)
+        cyphertext = encrypt_plaintext(T, E, N);
+        //printf("Computed cypher text: %llu\n", cyphertext);
+
+        // Decrypt cyphertext (should equal 123)
+        decrypted_plaintext = decrypt_cyphertext(cyphertext, D, N);
+        //printf("Computed plain text: %llu\n", decrypted_plaintext);
+
+        // Final assertions that calculations were correct
+        assert(cyphertext == 855);
+        assert(decrypted_plaintext == 123);
+    }
+}
 
 int main() 
 {
@@ -111,18 +133,8 @@ int main()
     printf("The public key is (N,E) = (%llu,%llu)\n", N, E);
     printf("The private key is (N,D) = (%llu,%llu)\n", N, D);
 
-
-    // Encrypt plaintext (should equal 855)
-    cyphertext = encrypt_plaintext(input_plaintext, E, N);
-    printf("Computed cypher text: %llu\n", cyphertext);
-
-    // Decrypt cyphertext (should equal 123)
-    decrypted_plaintext = decrypt_cyphertext(cyphertext, D, N);
-    printf("Computed plain text: %llu\n", decrypted_plaintext);
-
-    // Final assertions that calculations were correct
-    assert(cyphertext == 855);
-    assert(decrypted_plaintext == 123);
+    // Run the encryption and decryption cycle multiple times to capture more accurate results
+    loop_encrypt_decrypt_routine(input_plaintext, E, D, N);
 
     return 0;
 }

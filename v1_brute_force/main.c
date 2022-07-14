@@ -2,6 +2,8 @@
 #include <stdint.h>
 #include <assert.h>
 
+#define TEST_ITERATIONS 10000000
+
 // In this example, no software optimization techniques are implemented.
 
 uint64_t calculate_modular_exponentiation(uint64_t base, uint64_t exponent, uint64_t modulus)
@@ -38,7 +40,7 @@ void loop_encrypt_decrypt_routine(uint64_t T, uint64_t E, uint64_t D, uint64_t N
     uint64_t cyphertext, decrypted_plaintext;
 
     uint64_t i;
-    for (i = 0; i < 100; i++) 
+    for (i = 0; i < TEST_ITERATIONS; i++) 
     {
         // Encrypt plaintext (should equal 855)
         cyphertext = encrypt_plaintext(T, E, N);
@@ -83,7 +85,7 @@ int main()
     printf("The public key is (N,E) = (%llu,%llu)\n", N, E);
     printf("The private key is (N,D) = (%llu,%llu)\n", N, D);
 
-    // Run the encyrption and decryption cycle 100 times to capture more accurate results
+    // Run the encryption and decryption cycle multiple times to capture more accurate results
     loop_encrypt_decrypt_routine(input_plaintext, E, D, N);
 
     return 0;
