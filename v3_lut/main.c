@@ -4,24 +4,9 @@
 
 #define MAX_LUT_POWER 12 // corresponds to 2^12 = 4096
 
-uint64_t compute_private_exponent(uint64_t E, uint64_t P, uint64_t Q) 
-{
-    // Calcuate D such that:
-    // D*E = 1 mod [(P-1)(Q-1)]
-    uint64_t M = (P-1) * (Q-1);
-    uint64_t D;
-    for (D = 1; D < M; D++)
-    {
-        if (((E % M) * (D % M)) % M == 1 )
-        {
-            return D;
-        }
-    }
-}
-
 uint64_t compute_modular_exponentiation_with_lut(uint64_t *pow_of_two, uint64_t pow_of_two_len, uint64_t *lut, uint64_t lut_len, uint64_t modulus)
 {
-    uint64_t result = lut[pow_of_two[0]];
+    register uint64_t result = lut[pow_of_two[0]];
     for (int i=1; i < pow_of_two_len; i++)
     {
         result = (result * lut[pow_of_two[i]]) % modulus;
@@ -45,7 +30,7 @@ uint64_t decrypt_cyphertext(uint64_t *pow_of_two, uint64_t pow_of_two_len, uint6
 
 uint64_t compute_powers_of_two(uint64_t num, uint64_t *table, uint64_t table_len)
 {
-    uint64_t i, j, temp;
+    register uint64_t i, j, temp;
     j = 0;
     temp = num;
     for (i=0; (1<<i) <= num; i++)
@@ -67,7 +52,7 @@ void compute_lookup_table(uint64_t base, uint64_t modulus, uint64_t *lookup_tabl
     // up to predetermined limit (imposed manually). All powers of two are divided by the modulus.
     lookup_table[0] = base % modulus;
 
-    uint64_t i;
+    register uint64_t i;
     for (i = 1; i < lookup_table_len; i++)
     {
         lookup_table[i] = (lookup_table[i-1] * lookup_table[i-1]) % modulus;
@@ -76,25 +61,23 @@ void compute_lookup_table(uint64_t base, uint64_t modulus, uint64_t *lookup_tabl
 
 int main() 
 {
-    uint64_t P, Q, N, E, D;
-    uint64_t input_plaintext, cyphertext, decrypted_plaintext;
+    register uint64_t P, Q, N, E, D;
+    register uint64_t input_plaintext, cyphertext, decrypted_plaintext;
 
-    // Generated primes from https://bigprimes.org/. 
-    // LCM of these numbers: lcm(70878, 48808) = 1,729,706,712
-    //P = 70879;
-    //Q = 48809;
+    // Prime numbers used to generate N, and private and public key. 
     P = 61;
     Q = 53;
+
     N = P*Q;
 
-    // 17 is a coprime to 3,459,413,424, for example. Found from https://www.mathsisfun.com/numbers/coprime-calculator.html 
+    // 17 is a coprime to lcm(P-1, Q-1)
     E = 17;
 
-    // We will convert this into a 1024-bit input once we have structure setup.
+    // Input to be encrypted.
     input_plaintext = 123;
 
-    // Calculate private exponent
-    D = compute_private_exponent(E, P, Q);
+    // Set private exponent beforehand to a known value.
+    D = 2753;
 
     printf("P: %llu, Q: %llu, N=P*Q: %llu\n", P, Q, N);
     printf("P-1: %llu, Q-1: %llu, (P-1)(Q-1): %llu\n", P-1, Q-1, (P-1)*(Q-1));
@@ -128,7 +111,7 @@ int main()
 
     // Encrypt the plain text with the lookup table (should equal 855)
     cyphertext = encrypt_plaintext(powers_of_two_public_exponent, num_of_powers_public_key, lookup_table_encrypt, MAX_LUT_POWER, N);
-    printf("Computer cypher text: %llu\n", cyphertext);
+    printf("Computed cypher text: %llu\n", cyphertext);
     assert(cyphertext == 855);
 
     // Decrypt cyphertext with the lookup table

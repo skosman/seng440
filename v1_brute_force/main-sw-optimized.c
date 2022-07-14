@@ -2,12 +2,15 @@
 #include <stdint.h>
 #include <assert.h>
 
-// In this example, no software optimization techniques are implemented.
+// In this example, we use the following optimization techniques:
+//   1. Loop unrolling in modular exponentiation routine
+//   2. Move externals and reference parameters to locals
+//   4. Caching using register keyword
 
 uint64_t calculate_modular_exponentiation(uint64_t base, uint64_t exponent, uint64_t modulus)
 {
     // We calculate modular exponentiation with multiply-and-square algorithm
-    uint64_t R = 1;
+    register uint64_t R = 1;
     while (exponent != 0)
     {
         if (exponent & 0x01)
@@ -35,9 +38,9 @@ uint64_t decrypt_cyphertext(uint64_t C, uint64_t D, uint64_t N)
 
 void loop_encrypt_decrypt_routine(uint64_t T, uint64_t E, uint64_t D, uint64_t N)
 {
-    uint64_t cyphertext, decrypted_plaintext;
+    register uint64_t cyphertext, decrypted_plaintext;
 
-    uint64_t i;
+    register uint64_t i;
     for (i = 0; i < 100; i++) 
     {
         // Encrypt plaintext (should equal 855)
@@ -56,8 +59,8 @@ void loop_encrypt_decrypt_routine(uint64_t T, uint64_t E, uint64_t D, uint64_t N
 
 int main() 
 {
-    uint64_t P, Q, N, E, D;
-    uint64_t input_plaintext, cyphertext, decrypted_plaintext;
+    register uint64_t P, Q, N, E, D;
+    register uint64_t input_plaintext, cyphertext, decrypted_plaintext;
 
     // Prime numbers used to generate N, and private and public key. 
     P = 61;

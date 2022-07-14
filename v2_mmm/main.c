@@ -2,34 +2,34 @@
 #include <stdint.h>
 #include <assert.h>
 
-int get_num_bits(uint64_t num) 
+uint64_t get_num_bits(uint64_t num) 
 {
-  int i = 0;
-  while (num > 0)
-  {
-    num >>= 1; 
-    ++i;
-  }
-
-  return i;
+    register uint64_t i = 0;
+    while (num > 0)
+    {
+        num >>= 1; 
+        ++i;
+    }
+    return i;
 }
 
 // TODO? Update to use our own version of mmm
 uint64_t montgomery_modular_multiplication(uint64_t X, uint64_t Y, uint64_t M) 
 {
-    int i;
-    uint64_t T;
-    uint64_t Xi, T0, Y0;
-    uint64_t eta;
-    uint64_t Xi_Y;
-    uint64_t eta_M;
+    register uint64_t i;
+    register uint64_t T;
+    register uint64_t Xi, T0, Y0;
+    register uint64_t eta;
+    register uint64_t Xi_Y;
+    register uint64_t eta_M;
 
-    uint64_t temp_M = M;
-    int m = get_num_bits(M);
+    register uint64_t temp_M = M;
+    register uint64_t m = get_num_bits(M);
     
     T = 0;
     Y0 = Y & 1;
-    for( i=0; i<m; i++) {
+    for( i=0; i<m; i++) 
+    {
         Xi = (X >> i) & 1;
         T0 = T & 1;
         eta = T0 ^ (Xi & Y0);
@@ -37,6 +37,7 @@ uint64_t montgomery_modular_multiplication(uint64_t X, uint64_t Y, uint64_t M)
         eta_M = eta ? M : 0;
         T = (T + Xi_Y + eta_M) >> 1;
     }
+    
     while ( T >= M)
         T -= M;
 
@@ -47,13 +48,13 @@ uint64_t montgomery_modular_multiplication(uint64_t X, uint64_t Y, uint64_t M)
 // using montgomery modular multiplication for any modular multiplication operations
 uint64_t multiply_and_square(uint64_t X, uint64_t Y, uint64_t M)  
 {
-    int num_bits = get_num_bits(M);
-    uint64_t R = (1 << num_bits) % M;
-    uint64_t R2 = (R * R) % M;
+    register uint64_t num_bits = get_num_bits(M);
+    register uint64_t R = (1 << num_bits) % M;
+    register uint64_t R2 = (R * R) % M;
 
-    uint64_t T = R;
+    register uint64_t T = R;
     // Scale the operand up with R
-    uint64_t X_scaled = montgomery_modular_multiplication(X, R2, M);
+    register uint64_t X_scaled = montgomery_modular_multiplication(X, R2, M);
     while (Y != 0)
     {
         if (Y & 0x01) {
@@ -70,22 +71,6 @@ uint64_t multiply_and_square(uint64_t X, uint64_t Y, uint64_t M)
     return T;
 }
 
-uint64_t compute_private_exponent(uint64_t E, uint64_t P, uint64_t Q) 
-{
-    // Calcuate D such that:
-    // D*E = 1 mod [(P-1)(Q-1)]
-    uint64_t M = (P-1) * (Q-1);
-    int D;
-    for (D = 1; D < M; D++)
-    {
-        if (((E % M) * (D % M)) % M == 1 )
-        {
-            return D;
-        }
-    }
-    return D;
-}
-
 uint64_t encrypt_plaintext(uint64_t T, uint64_t E, uint64_t N) 
 {
    return multiply_and_square(T, E, N);
@@ -99,26 +84,23 @@ uint64_t decrypt_cyphertext(uint64_t C, uint64_t D, uint64_t N)
 
 int main() 
 {
-    uint64_t P, Q, N, E, D;
-    uint64_t input_plaintext, cyphertext, decrypted_plaintext;
+    register uint64_t P, Q, N, E, D;
+    register uint64_t input_plaintext, cyphertext, decrypted_plaintext;
 
-    // Generated primes from https://bigprimes.org/. 
-    // LCM of these numbers: lcm(70878, 48808) = 1,729,706,712
-    //P = 70879;
-    //Q = 48809;
+    // Prime numbers used to generate N, and private and public key. 
     P = 61;
     Q = 53;
 
     N = P*Q;
 
-    // 17 is a coprime to 3,459,413,424, for example. Found from https://www.mathsisfun.com/numbers/coprime-calculator.html 
+    // 17 is a coprime to lcm(P-1, Q-1)
     E = 17;
 
-    // We will convert this into a 1024-bit input once we have structure setup.
+    // Input to be encrypted.
     input_plaintext = 123;
 
-    // Calculate private exponent
-    D = compute_private_exponent(E, P, Q);
+    // Set private exponent beforehand to a known value.
+    D = 2753;
 
     printf("P: %llu, Q: %llu, N=P*Q: %llu\n", P, Q, N);
     printf("P-1: %llu, Q-1: %llu, (P-1)(Q-1): %llu\n", P-1, Q-1, (P-1)*(Q-1));
