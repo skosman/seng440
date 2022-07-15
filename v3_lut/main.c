@@ -8,10 +8,12 @@
 uint64_t compute_modular_exponentiation_with_lut(uint64_t *pow_of_two, uint64_t pow_of_two_len, uint64_t *lut, uint64_t lut_len, uint64_t modulus)
 {
     register uint64_t result = lut[pow_of_two[0]];
-    for (int i=1; i < pow_of_two_len; i++)
+    register uint64_t i;
+    for (i=1; i < pow_of_two_len; i++)
     {
         result = (result * lut[pow_of_two[i]]) % modulus;
     }
+
     return result;
 }
 
@@ -31,15 +33,24 @@ uint64_t decrypt_cyphertext(uint64_t *pow_of_two, uint64_t pow_of_two_len, uint6
 
 uint64_t compute_powers_of_two(uint64_t num, uint64_t *table, uint64_t table_len)
 {
-    register uint64_t i, j, temp;
+    register uint64_t i;
+    register uint64_t j;
+    register uint64_t temp;
+
     j = 0;
     temp = num;
     for (i=0; (1<<i) <= num; i++)
     {
-        if (temp & 1) 
+        if (1 & temp)
         {
-            table[j++] = i;
+            table[j] = i;
+            j++;
         }
+        else
+        {
+            // No action.
+        }
+
         temp >>= 1;
     }
     
@@ -62,9 +73,10 @@ void compute_lookup_table(uint64_t base, uint64_t modulus, uint64_t *lookup_tabl
 
 void loop_encrypt_decrypt_routine(uint64_t *powers_of_two_public_exponent, uint64_t *powers_of_two_private_exponent, uint64_t num_of_powers_public_key, uint64_t num_of_powers_private_key, uint64_t *lookup_table_encrypt, uint64_t *lookup_table_decrypt, uint64_t N)
 {
-    uint64_t cyphertext, decrypted_plaintext;
+    register uint64_t cyphertext;
+    register uint64_t decrypted_plaintext;
 
-    uint64_t i;
+    register uint64_t i;
     for (i = 0; i < TEST_ITERATIONS; i++) 
     {
         // Encrypt the plain text with the lookup table (should equal 855)
@@ -83,8 +95,14 @@ void loop_encrypt_decrypt_routine(uint64_t *powers_of_two_public_exponent, uint6
 
 int main() 
 {
-    register uint64_t P, Q, N, E, D;
-    register uint64_t input_plaintext, cyphertext, decrypted_plaintext;
+    register uint64_t P; 
+    register uint64_t Q;
+    register uint64_t N;
+    register uint64_t E;
+    register uint64_t D;
+    register uint64_t input_plaintext;
+    register uint64_t cyphertext;
+    register uint64_t decrypted_plaintext;
 
     // Prime numbers used to generate N, and private and public key. 
     P = 61;

@@ -13,11 +13,15 @@ uint64_t calculate_modular_exponentiation(uint64_t base, uint64_t exponent, uint
 {
     // We calculate modular exponentiation with multiply-and-square algorithm
     register uint64_t R = 1;
-    while (exponent != 0)
+    while (0 != exponent)
     {
         if (exponent & 0x01)
         {
             R = (R * base) % modulus;
+        }
+        else 
+        {
+            // No action
         }
 
         base = (base * base) % modulus;
@@ -40,7 +44,8 @@ uint64_t decrypt_cyphertext(uint64_t C, uint64_t D, uint64_t N)
 
 void loop_encrypt_decrypt_routine(uint64_t T, uint64_t E, uint64_t D, uint64_t N)
 {
-    register uint64_t cyphertext, decrypted_plaintext;
+    register uint64_t cyphertext; 
+    register uint64_t decrypted_plaintext;
 
     register uint64_t i;
     for (i = 0; i < TEST_ITERATIONS; i++) 
@@ -54,16 +59,21 @@ void loop_encrypt_decrypt_routine(uint64_t T, uint64_t E, uint64_t D, uint64_t N
         //printf("Computed plain text: %llu\n", decrypted_plaintext);
 
         // Final assertions that calculations were correct
-        assert(cyphertext == 855);
-        assert(decrypted_plaintext == 123);
+        assert(855 == cyphertext);
+        assert(123 == decrypted_plaintext);
     }
 }
 
 int main() 
 {
-    register uint64_t P, Q, N, E, D;
-    register uint64_t input_plaintext, cyphertext, decrypted_plaintext;
-
+    register uint64_t P; 
+    register uint64_t Q;
+    register uint64_t N;
+    register uint64_t E;
+    register uint64_t D;
+    register uint64_t input_plaintext;
+    register uint64_t cyphertext;
+    register uint64_t decrypted_plaintext;
     // Prime numbers used to generate N, and private and public key. 
     P = 61;
     Q = 53;

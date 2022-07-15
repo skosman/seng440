@@ -20,7 +20,9 @@ uint64_t montgomery_modular_multiplication(uint64_t X, uint64_t Y, uint64_t M)
 {
     register uint64_t i;
     register uint64_t T;
-    register uint64_t Xi, T0, Y0;
+    register uint64_t Xi;
+    register uint64_t T0;
+    register uint64_t Y0;
     register uint64_t eta;
     register uint64_t Xi_Y;
     register uint64_t eta_M;
@@ -41,7 +43,9 @@ uint64_t montgomery_modular_multiplication(uint64_t X, uint64_t Y, uint64_t M)
     }
     
     while ( T >= M)
+    {
         T -= M;
+    }        
 
     return T;
 }
@@ -57,10 +61,15 @@ uint64_t multiply_and_square(uint64_t X, uint64_t Y, uint64_t M)
     register uint64_t T = R;
     // Scale the operand up with R
     register uint64_t X_scaled = montgomery_modular_multiplication(X, R2, M);
-    while (Y != 0)
+    while (0 != Y)
     {
-        if (Y & 0x01) {
+        if (Y & 0x01) 
+        {
           T = montgomery_modular_multiplication(X_scaled, T, M);
+        }
+        else
+        {
+            // No action
         }
 
         X_scaled = montgomery_modular_multiplication(X_scaled, X_scaled, M);
@@ -85,7 +94,8 @@ uint64_t decrypt_cyphertext(uint64_t C, uint64_t D, uint64_t N)
 
 void loop_encrypt_decrypt_routine(uint64_t T, uint64_t E, uint64_t D, uint64_t N)
 {
-    uint64_t cyphertext, decrypted_plaintext;
+    register uint64_t cyphertext;
+    register uint64_t decrypted_plaintext;
 
     uint64_t i;
     for (i = 0; i < TEST_ITERATIONS; i++) 
@@ -99,15 +109,21 @@ void loop_encrypt_decrypt_routine(uint64_t T, uint64_t E, uint64_t D, uint64_t N
         //printf("Computed plain text: %llu\n", decrypted_plaintext);
 
         // Final assertions that calculations were correct
-        assert(cyphertext == 855);
-        assert(decrypted_plaintext == 123);
+        assert(855 == cyphertext);
+        assert(123 == decrypted_plaintext);
     }
 }
 
 int main() 
 {
-    register uint64_t P, Q, N, E, D;
-    register uint64_t input_plaintext, cyphertext, decrypted_plaintext;
+    register uint64_t P; 
+    register uint64_t Q;
+    register uint64_t N;
+    register uint64_t E;
+    register uint64_t D;
+    register uint64_t input_plaintext;
+    register uint64_t cyphertext;
+    register uint64_t decrypted_plaintext;
 
     // Prime numbers used to generate N, and private and public key. 
     P = 61;
