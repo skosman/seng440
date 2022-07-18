@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include <assert.h>
 
-#define TEST_ITERATIONS 10000000
+#define TEST_ITERATIONS 1
 
 uint64_t get_num_bits(uint64_t num) 
 {
@@ -15,37 +15,28 @@ uint64_t get_num_bits(uint64_t num)
     return i;
 }
 
-// TODO? Update to use our own version of mmm
 uint64_t montgomery_modular_multiplication(uint64_t X, uint64_t Y, uint64_t M) 
 {
     register uint64_t i;
     register uint64_t T;
     register uint64_t Xi;
-    register uint64_t T0;
     register uint64_t Y0;
     register uint64_t eta;
-    register uint64_t Xi_Y;
-    register uint64_t eta_M;
 
-    register uint64_t temp_M = M;
     register uint64_t m = get_num_bits(M);
     
     T = 0;
     Y0 = Y & 1;
-    for( i=0; i<m; i++) 
-    {
+
+    for (i = 0; i < m; ++i) {
         Xi = (X >> i) & 1;
-        T0 = T & 1;
-        eta = T0 ^ (Xi & Y0);
-        Xi_Y = Xi ? Y : 0;
-        eta_M = eta ? M : 0;
-        T = (T + Xi_Y + eta_M) >> 1;
+        eta = (T & 1) ^ (Xi & Y0);
+        T = (T + (Xi * Y) + (eta * M)) >> 1;
     }
     
-    while ( T >= M)
-    {
-        T -= M;
-    }        
+    if (T >= M) {
+        T = T - M;
+    }
 
     return T;
 }
@@ -102,11 +93,11 @@ void loop_encrypt_decrypt_routine(uint64_t T, uint64_t E, uint64_t D, uint64_t N
     {
         // Encrypt plaintext (should equal 855)
         cyphertext = encrypt_plaintext(T, E, N);
-        //printf("Computed cypher text: %llu\n", cyphertext);
+        printf("Computed cypher text: %llu\n", cyphertext);
 
         // Decrypt cyphertext (should equal 123)
         decrypted_plaintext = decrypt_cyphertext(cyphertext, D, N);
-        //printf("Computed plain text: %llu\n", decrypted_plaintext);
+        printf("Computed plain text: %llu\n", decrypted_plaintext);
 
         // Final assertions that calculations were correct
         assert(855 == cyphertext);
