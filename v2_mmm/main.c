@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include <assert.h>
 
-#define TEST_ITERATIONS 1
+#define TEST_ITERATIONS 10000000
 
 uint64_t get_num_bits(uint64_t num) 
 {
