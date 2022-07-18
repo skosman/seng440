@@ -17,12 +17,14 @@ uint64_t get_num_bits(uint64_t num)
 
 // Applied software optimization techniques such as
 // * loop unrolling
+// * software pipelining (check assembly that it eliminates true dependencies)
 
 uint64_t montgomery_modular_multiplication(uint64_t X, uint64_t Y, uint64_t M) 
 {
     register int i;
     register uint64_t T;
     register uint64_t Xi;
+    register uint64_t Xi1;
     register uint64_t Y0;
     register uint64_t eta;
 
@@ -31,14 +33,15 @@ uint64_t montgomery_modular_multiplication(uint64_t X, uint64_t Y, uint64_t M)
     T = 0;
     Y0 = Y & 1;
     Xi = X & 1;
+    Xi1 = (X >> 1) & 1; // Add another variable to eliminate true dependency
 
     for (i = 0; i < m ; i+= 2) {
         eta = (T & 1) ^ (Xi & Y0);
         T = (T + (Xi * Y) + (eta * M)) >> 1;
-        Xi = (X >> (i+1)) & 1;
-        eta = (T & 1) ^ (Xi & Y0);
-        T = (T + (Xi * Y) + (eta * M)) >> 1;
-         Xi = (X >> (i+2)) & 1;
+        eta = (T & 1) ^ (Xi1 & Y0);
+        T = (T + (Xi1 * Y) + (eta * M)) >> 1;
+        Xi = (X >> (i+2)) & 1;
+        Xi1 = (X >> (i+3)) & 1; 
     }
     
     if (T >= M) {
