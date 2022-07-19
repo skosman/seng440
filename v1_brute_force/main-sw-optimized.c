@@ -3,11 +3,12 @@
 #include <assert.h>
 
 #define TEST_ITERATIONS 10000000
+#define multiply_and_divide_by_modulus(x,y,z) ((x)*(y)) % (z)
 
 // In this example, we use the following optimization techniques:
 //   1. Loop unrolling in modular exponentiation routine
-//   2. Move externals and reference parameters to locals
-//   4. Caching using register keyword
+//   2. Caching using register keyword
+//   3. Remove function calls by defining macros
 
 uint64_t calculate_modular_exponentiation(uint64_t base, uint64_t exponent, uint64_t modulus)
 {
@@ -15,16 +16,16 @@ uint64_t calculate_modular_exponentiation(uint64_t base, uint64_t exponent, uint
     register uint64_t R = 1;
     while (0 != exponent)
     {
-        if (exponent & 0x01)
+        if (0x01 & exponent)
         {
-            R = (R * base) % modulus;
+            R = multiply_and_divide_by_modulus(R, base, modulus);
         }
         else 
         {
             // No action
         }
 
-        base = (base * base) % modulus;
+        base = multiply_and_divide_by_modulus(base, base, modulus);
         exponent >>=1;
     }
     return R;
@@ -48,7 +49,7 @@ void loop_encrypt_decrypt_routine(uint64_t T, uint64_t E, uint64_t D, uint64_t N
     register uint64_t decrypted_plaintext;
 
     register uint64_t i;
-    for (i = 0; i < TEST_ITERATIONS; i++) 
+    for (i = TEST_ITERATIONS; i != 0; i--) 
     {
         // Encrypt plaintext (should equal 855)
         cyphertext = encrypt_plaintext(T, E, N);

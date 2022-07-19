@@ -10,7 +10,7 @@ uint64_t calculate_modular_exponentiation(uint64_t base, uint64_t exponent, uint
 {
     // We calculate modular exponentiation with multiply-and-square algorithm
     uint64_t R = 1;
-    while (0 != exponent)
+    while (exponent != 0)
     {
         if (exponent & 0x01)
         {
@@ -56,8 +56,8 @@ void loop_encrypt_decrypt_routine(uint64_t T, uint64_t E, uint64_t D, uint64_t N
         //printf("Computed plain text: %llu\n", decrypted_plaintext);
 
         // Final assertions that calculations were correct
-        assert(855 == cyphertext);
-        assert(123 == decrypted_plaintext);
+        assert(cyphertext == 855);
+        assert(decrypted_plaintext == 123);
     }
 }
 
