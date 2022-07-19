@@ -8,7 +8,7 @@
 // In this example, we use the following optimization techniques:
 //   1. Loop unrolling in modular exponentiation routine
 //   2. Caching using register keyword
-//   3. Remove function calls by defining macros
+//   3. Remove function calls by defining macros and removing encrypt_plaintext and decrypt_cyphertext
 
 uint64_t calculate_modular_exponentiation(uint64_t base, uint64_t exponent, uint64_t modulus)
 {
@@ -31,18 +31,6 @@ uint64_t calculate_modular_exponentiation(uint64_t base, uint64_t exponent, uint
     return R;
 }
 
-uint64_t encrypt_plaintext(uint64_t T, uint64_t E, uint64_t N) 
-{
-    // Encrypt plaintext and compute the cyphertext
-    return calculate_modular_exponentiation(T, E, N);
-}
-
-uint64_t decrypt_cyphertext(uint64_t C, uint64_t D, uint64_t N) 
-{
-    // Decrypt cyphertext and compute plaintext
-    return calculate_modular_exponentiation(C, D, N);
-}
-
 void loop_encrypt_decrypt_routine(uint64_t T, uint64_t E, uint64_t D, uint64_t N)
 {
     register uint64_t cyphertext; 
@@ -52,11 +40,11 @@ void loop_encrypt_decrypt_routine(uint64_t T, uint64_t E, uint64_t D, uint64_t N
     for (i = TEST_ITERATIONS; i != 0; i--) 
     {
         // Encrypt plaintext (should equal 855)
-        cyphertext = encrypt_plaintext(T, E, N);
+        cyphertext = calculate_modular_exponentiation(T, E, N);
         //printf("Computed cypher text: %llu\n", cyphertext);
 
         // Decrypt cyphertext (should equal 123)
-        decrypted_plaintext = decrypt_cyphertext(cyphertext, D, N);
+        decrypted_plaintext = calculate_modular_exponentiation(cyphertext, D, N);
         //printf("Computed plain text: %llu\n", decrypted_plaintext);
 
         // Final assertions that calculations were correct

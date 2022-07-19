@@ -12,14 +12,13 @@ uint64_t get_num_bits(uint64_t num)
     return i;
 }
 
-uint64_t montgomery_modular_multiplication(uint64_t X, uint64_t Y, uint64_t M) 
+uint64_t montgomery_modular_multiplication(uint64_t X, uint64_t Y, uint64_t M, uint64_t m) 
 {
     register uint64_t i;
     register uint64_t T;
     register uint64_t Xi;
     register uint64_t Y0;
     register uint64_t eta;
-    register uint64_t m = get_num_bits(M);
     
     T = 0;
     Y0 = Y & 1;
@@ -33,7 +32,6 @@ uint64_t montgomery_modular_multiplication(uint64_t X, uint64_t Y, uint64_t M)
     if (T >= M) {
         T = T - M;
     }
-
     return T;
 }
 
@@ -41,42 +39,33 @@ uint64_t montgomery_modular_multiplication(uint64_t X, uint64_t Y, uint64_t M)
 // using montgomery modular multiplication for any modular multiplication operations
 uint64_t multiply_and_square(uint64_t X, uint64_t Y, uint64_t M)  
 {
-    register uint64_t num_bits = get_num_bits(M);
-    register uint64_t R = (1 << num_bits) % M;
+    //register uint64_t num_bits = get_num_bits(M);
+    register uint64_t m = get_num_bits(M);
+    register uint64_t R = (1 << m) % M;
     register uint64_t R2 = multiply_and_divide_by_modulus(R, R, M);
 
     register uint64_t T = R;
     // Scale the operand up with R
-    register uint64_t X_scaled = montgomery_modular_multiplication(X, R2, M);
+    register uint64_t X_scaled = montgomery_modular_multiplication(X, R2, M, m);
+
     while (0 != Y)
     {
         if (0x01 & Y) 
         {
-          T = montgomery_modular_multiplication(X_scaled, T, M);
+          T = montgomery_modular_multiplication(X_scaled, T, M, m);
         }
         else
         {
             // No action
         }
 
-        X_scaled = montgomery_modular_multiplication(X_scaled, X_scaled, M);
+        X_scaled = montgomery_modular_multiplication(X_scaled, X_scaled, M, m);
         Y >>=1;
     }
 
     // Scale down the result
-    T = montgomery_modular_multiplication(T, 1, M);
-
+    T = montgomery_modular_multiplication(T, 1, M, m);
     return T;
-}
-
-uint64_t encrypt_plaintext(uint64_t T, uint64_t E, uint64_t N) 
-{
-   return multiply_and_square(T, E, N);
-}
-
-uint64_t decrypt_cyphertext(uint64_t C, uint64_t D, uint64_t N) 
-{
-  return multiply_and_square(C, D, N);
 }
 
 void loop_encrypt_decrypt_routine(uint64_t T, uint64_t E, uint64_t D, uint64_t N)
@@ -88,11 +77,11 @@ void loop_encrypt_decrypt_routine(uint64_t T, uint64_t E, uint64_t D, uint64_t N
     for (i = 0; i < TEST_ITERATIONS; i++) 
     {
         // Encrypt plaintext (should equal 855)
-        cyphertext = encrypt_plaintext(T, E, N);
+        cyphertext = multiply_and_square(T, E, N);
         //printf("Computed cypher text: %llu\n", cyphertext);
 
         // Decrypt cyphertext (should equal 123)
-        decrypted_plaintext = decrypt_cyphertext(cyphertext, D, N);
+        decrypted_plaintext = multiply_and_square(cyphertext, D, N);
         //printf("Computed plain text: %llu\n", decrypted_plaintext);
 
         // Final assertions that calculations were correct
