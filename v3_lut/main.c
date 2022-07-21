@@ -12,6 +12,15 @@ uint64_t compute_modular_exponentiation_with_lut(uint64_t *pow_of_two, uint64_t 
     for (i=1; i < pow_of_two_len; i++)
     {
         result = (result * lut[pow_of_two[i]]) % modulus;
+
+        i++;
+        if (i == pow_of_two_len)
+        {
+            break;
+        }
+
+        // Loop unrolling with duplicated code segment
+        result = (result * lut[pow_of_two[i]]) % modulus;
     }
 
     return result;
@@ -50,7 +59,24 @@ uint64_t compute_powers_of_two(uint64_t num, uint64_t *table, uint64_t table_len
         {
             // No action.
         }
+        temp >>= 1;
 
+        i++;
+        if ((1<<i) == num)
+        {
+            break;
+        }
+
+        // Loop unrolling with duplicated code segment
+        if (1 & temp)
+        {
+            table[j] = i;
+            j++;
+        }
+        else
+        {
+            // No action.
+        }
         temp >>= 1;
     }
     

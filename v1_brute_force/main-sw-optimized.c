@@ -27,6 +27,27 @@ uint64_t calculate_modular_exponentiation(uint64_t base, uint64_t exponent, uint
 
         base = multiply_and_divide_by_modulus(base, base, modulus);
         exponent >>=1;
+        if (0 == exponent) 
+        {
+            break;
+        }
+        else
+        {
+            // No action
+        }
+
+        // Duplicated code is an example of loop unrolling.
+        if (0x01 & exponent)
+        {
+            R = multiply_and_divide_by_modulus(R, base, modulus);
+        }
+        else 
+        {
+            // No action
+        }
+
+        base = multiply_and_divide_by_modulus(base, base, modulus);
+        exponent >>=1;       
     }
     return R;
 }
