@@ -66,16 +66,13 @@ calculate_modular_exponentiation:
 	add	r2, r2, r3
 	ldr	r1, [fp, #-36]
 	ldr	r3, [fp, #-36]
-	umull	r5, r6, r1, r3
-	mov	r3, r5
-	mov	r4, r6
-	add	r2, r2, r4
-	mov	r4, r2
-	mov	r0, r3
-	mov	r1, r4
-	ldmib	fp, {r2-r3}
+	; Remove redundant move instructions
+	add	r2, r2, r6
+	mov	r0, r5
+	mov	r1, r2
+	ldmib	fp, {r2-r5}
 	bl	__aeabi_uldivmod
-	mov	r4, r3
+	mov	r4, r5
 	mov	r3, r2
 	str	r3, [fp, #-36]
 	str	r4, [fp, #-32]
@@ -120,10 +117,7 @@ encrypt_plaintext:
 	sub	r3, fp, #28
 	ldmia	r3, {r2-r3}
 	bl	calculate_modular_exponentiation
-	mov	r3, r0
-	mov	r4, r1
-	mov	r0, r3
-	mov	r1, r4
+	; Remove redundant move instructions
 	sub	sp, fp, #8
 	ldmfd	sp!, {r4, fp, lr}
 	bx	lr
@@ -149,10 +143,7 @@ decrypt_cyphertext:
 	sub	r3, fp, #28
 	ldmia	r3, {r2-r3}
 	bl	calculate_modular_exponentiation
-	mov	r3, r0
-	mov	r4, r1
-	mov	r0, r3
-	mov	r1, r4
+	; Remove redundant move instructions
 	sub	sp, fp, #8
 	ldmfd	sp!, {r4, fp, lr}
 	bx	lr
