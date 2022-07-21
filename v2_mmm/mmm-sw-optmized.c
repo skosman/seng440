@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include <assert.h>
 
-#define TEST_ITERATIONS 10000000
+#define TEST_ITERATIONS 100000
 
 int get_num_bits(uint64_t num) 
 {
@@ -31,14 +31,11 @@ uint64_t montgomery_modular_multiplication(uint64_t X, uint64_t Y, uint64_t M)
     
     T = 0;
     Y0 = Y & 1;
-
-    for (i = 0; i < m ; i+= 2) {
-        Xi = (X >> (i)) & 1;
+    Xi = X & 1;
+    for (i = 0; i < m ; i++) {
         eta = (T & 1) ^ (Xi & Y0);
         T = (T + (Xi * Y) + (eta * M)) >> 1;
         Xi = (X >> (i+1)) & 1;
-        eta = (T & 1) ^ (Xi & Y0);
-        T = (T + (Xi * Y) + (eta * M)) >> 1;
     }
     
     if (T >= M) {
