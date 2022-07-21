@@ -236,18 +236,16 @@ multiply_and_square:
 	mov	r1, r4
 	ldmib	fp, {r2-r3}
 	bl	__aeabi_uldivmod
-	mov	r4, r3
-	mov	r3, r2
-	mov	r5, r3
-	mov	r6, r4
+	; Remove redundant move operations
+	mov	r5, r2
+	mov	r6, r2
 	mul	r2, r5, r6
 	mul	r3, r5, r6
 	add	r2, r2, r3
-	umull	r3, r4, r5, r5
-	add	r2, r2, r4
-	mov	r4, r2
+	umull	r3, r3, r5, r5
+	add	r2, r2, r3
 	mov	r0, r3
-	mov	r1, r4
+	mov	r1, r2
 	ldmib	fp, {r2-r3}
 	bl	__aeabi_uldivmod
 	mov	r4, r3

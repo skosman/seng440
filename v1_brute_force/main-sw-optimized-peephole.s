@@ -46,13 +46,11 @@ calculate_modular_exponentiation:
 	ldr	r3, [fp, #-28]
 	ldr	ip, [fp, #-44]
 	umull	r5, r6, r3, ip
-	mov	r3, r5
-	mov	r4, r6
-	add	r2, r2, r4
-	mov	r4, r2
-	mov	r0, r3
-	mov	r1, r4
-	ldmib	fp, {r2-r3}
+	; Remove redundant move instructions
+	add	r2, r2, r6
+	mov	r0, r5
+	mov	r1, r2
+	ldmib	fp, {r2-r5}
 	bl	__aeabi_uldivmod
 	mov	r4, r3
 	mov	r3, r2
@@ -69,15 +67,13 @@ calculate_modular_exponentiation:
 	ldr	r1, [fp, #-28]
 	ldr	r3, [fp, #-28]
 	umull	r5, r6, r1, r3
-	mov	r3, r5
-	mov	r4, r6
-	add	r2, r2, r4
-	mov	r4, r2
-	mov	r0, r3
-	mov	r1, r4
-	ldmib	fp, {r2-r3}
+	; Remove redundant move instructions
+	add	r2, r2, r6
+	mov	r0, r5
+	mov	r1, r2
+	ldmib	fp, {r2-r5}
 	bl	__aeabi_uldivmod
-	mov	r4, r3
+	mov	r4, r5
 	mov	r3, r2
 	str	r3, [fp, #-28]
 	str	r4, [fp, #-24]
@@ -107,15 +103,13 @@ calculate_modular_exponentiation:
 	ldr	r3, [fp, #-28]
 	ldr	r5, [fp, #-44]
 	umull	r0, r1, r3, r5
-	mov	r3, r0
-	mov	r4, r1
-	add	r2, r2, r4
+	; Remove redundant move instructions
+	add	r2, r2, r1
 	mov	r4, r2
-	mov	r0, r3
 	mov	r1, r4
-	ldmib	fp, {r2-r3}
+	ldmib	fp, {r2-r0}
 	bl	__aeabi_uldivmod
-	mov	r4, r3
+	mov	r4, r0
 	mov	r3, r2
 	str	r3, [fp, #-44]
 	str	r4, [fp, #-40]
@@ -130,15 +124,14 @@ calculate_modular_exponentiation:
 	ldr	r1, [fp, #-28]
 	ldr	r3, [fp, #-28]
 	umull	r5, r6, r1, r3
-	mov	r3, r5
-	mov	r4, r6
-	add	r2, r2, r4
+	; Remove redundant move instructions
+	add	r2, r2, r6
 	mov	r4, r2
-	mov	r0, r3
+	mov	r0, r5
 	mov	r1, r4
-	ldmib	fp, {r2-r3}
+	ldmib	fp, {r2-r5}
 	bl	__aeabi_uldivmod
-	mov	r4, r3
+	mov	r4, r5
 	mov	r3, r2
 	str	r3, [fp, #-28]
 	str	r4, [fp, #-24]
