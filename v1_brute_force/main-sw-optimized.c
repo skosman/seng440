@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include <assert.h>
 
-#define TEST_ITERATIONS 10000000
+#define TEST_ITERATIONS 100000
 #define multiply_and_divide_by_modulus(x,y,z) ((x)*(y)) % (z)
 
 // In this example, we use the following optimization techniques:
@@ -48,7 +48,7 @@ void loop_encrypt_decrypt_routine(uint64_t T, uint64_t E, uint64_t D, uint64_t N
         //printf("Computed plain text: %llu\n", decrypted_plaintext);
 
         // Final assertions that calculations were correct
-        assert(855 == cyphertext);
+        assert(79044686 == cyphertext);
         assert(123 == decrypted_plaintext);
     }
 }
@@ -64,8 +64,8 @@ int main()
     register uint64_t cyphertext;
     register uint64_t decrypted_plaintext;
     // Prime numbers used to generate N, and private and public key. 
-    P = 61;
-    Q = 53;
+    P = 69857;
+    Q = 14081;
 
     N = P*Q;
 
@@ -76,7 +76,7 @@ int main()
     input_plaintext = 123;
 
     // Set private exponent beforehand to a known value.
-    D = 2753;
+    D = 405000433;
 
     printf("P: %llu, Q: %llu, N=P*Q: %llu\n", P, Q, N);
     printf("P-1: %llu, Q-1: %llu, (P-1)(Q-1): %llu\n", P-1, Q-1, (P-1)*(Q-1));

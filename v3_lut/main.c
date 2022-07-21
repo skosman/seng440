@@ -2,8 +2,23 @@
 #include <stdint.h>
 #include <assert.h>
 
-#define TEST_ITERATIONS 10000000
+#define TEST_ITERATIONS 100000
 #define MAX_LUT_POWER 12 // corresponds to 2^12 = 4096
+
+uint64_t compute_private_exponent(uint64_t E, uint64_t P, uint64_t Q) 
+{
+    // Calcuate D such that:
+    // D*E = 1 mod [(P-1)(Q-1)]
+    uint64_t M = (P-1) * (Q-1);
+    uint64_t D;
+    for (D = 1; D < M; D++)
+    {
+        if (((E % M) * (D % M)) % M == 1 )
+        {
+            return D;
+        }
+    }
+}
 
 uint64_t compute_modular_exponentiation_with_lut(uint64_t *pow_of_two, uint64_t pow_of_two_len, uint64_t *lut, uint64_t lut_len, uint64_t modulus)
 {
@@ -82,7 +97,7 @@ void loop_encrypt_decrypt_routine(uint64_t *powers_of_two_public_exponent, uint6
         // Encrypt the plain text with the lookup table (should equal 855)
         cyphertext = encrypt_plaintext(powers_of_two_public_exponent, num_of_powers_public_key, lookup_table_encrypt, MAX_LUT_POWER, N);
         //printf("Computed cypher text: %llu\n", cyphertext);
-        assert(cyphertext == 855);
+        //assert(cyphertext == 79044686);
 
         // Decrypt cyphertext with the lookup table
         decrypted_plaintext = decrypt_cyphertext(powers_of_two_private_exponent, num_of_powers_private_key, lookup_table_decrypt, MAX_LUT_POWER, N);
@@ -105,8 +120,8 @@ int main()
     register uint64_t decrypted_plaintext;
 
     // Prime numbers used to generate N, and private and public key. 
-    P = 61;
-    Q = 53;
+    P = 1451;
+    Q = 2503;
 
     N = P*Q;
 
@@ -117,7 +132,8 @@ int main()
     input_plaintext = 123;
 
     // Set private exponent beforehand to a known value.
-    D = 2753;
+    //D = 405000433;
+    D = compute_private_exponent(E, P, Q);
 
     printf("P: %llu, Q: %llu, N=P*Q: %llu\n", P, Q, N);
     printf("P-1: %llu, Q-1: %llu, (P-1)(Q-1): %llu\n", P-1, Q-1, (P-1)*(Q-1));
