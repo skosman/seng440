@@ -193,9 +193,8 @@ loop_encrypt_decrypt_routine:
 	str	r1, [fp, #-16]
 	str	r2, [fp, #-28]
 	str	r3, [fp, #-24]
-	mov	r1, #9961472
-	add	r1, r1, #38400
-	add	r1, r1, #128
+	mov	r1, #99328
+	add	r1, r1, #672
 	mov	r2, #0
 	str	r1, [fp, #-36]
 	str	r2, [fp, #-32]

@@ -447,15 +447,15 @@ loop_encrypt_decrypt_routine:
 	cmp	r3, #0
 	bne	.L25
 	ldr	r2, [fp, #-20]
-	mov	r3, #9961472
-	add	r3, r3, #38400
-	add	r3, r3, #127
+	mov	r3, #99328
+	add	r3, r3, #668
+	add	r3, r3, #3
 	cmp	r2, r3
 	bhi	.L27
 	ldr	r2, [fp, #-20]
-	mov	r3, #9961472
-	add	r3, r3, #38400
-	add	r3, r3, #127
+	mov	r3, #99328
+	add	r3, r3, #668
+	add	r3, r3, #3
 	cmp	r2, r3
 	b	.L25
 .L27:
