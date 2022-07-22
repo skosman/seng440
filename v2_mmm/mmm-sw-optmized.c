@@ -3,15 +3,12 @@
 #include <assert.h>
 
 #define TEST_ITERATIONS 100000
+#define multiply_and_divide_by_modulus(x,y,z) ((x)*(y)) % (z)
 
 int get_num_bits(uint64_t num) 
 {
     register int i = 0;
-    while (num > 0)
-    {
-        num >>= 1; 
-        ++i;
-    }
+    for (i=0; num!=0; ++i) num >>= 1;
     return i;
 }
 
@@ -51,7 +48,7 @@ uint64_t multiply_and_square(uint64_t X, uint64_t Y, uint64_t M)
 {
     register uint64_t num_bits = get_num_bits(M);
     register uint64_t R = (1 << num_bits) % M;
-    register uint64_t R2 = (R * R) % M;
+    uint64_t R2 = multiply_and_divide_by_modulus(R, R, M);
 
     register uint64_t T = R;
     // Scale the operand up with R
@@ -77,16 +74,6 @@ uint64_t multiply_and_square(uint64_t X, uint64_t Y, uint64_t M)
     return T;
 }
 
-uint64_t encrypt_plaintext(uint64_t T, uint64_t E, uint64_t N) 
-{
-   return multiply_and_square(T, E, N);
-}
-
-uint64_t decrypt_cyphertext(uint64_t C, uint64_t D, uint64_t N) 
-{
-  return multiply_and_square(C, D, N);
-}
-
 void loop_encrypt_decrypt_routine(uint64_t T, uint64_t E, uint64_t D, uint64_t N)
 {
     register uint64_t cyphertext;
@@ -96,12 +83,12 @@ void loop_encrypt_decrypt_routine(uint64_t T, uint64_t E, uint64_t D, uint64_t N
     for (i = 0; i < TEST_ITERATIONS; i++) 
     {
         // Encrypt plaintext (should equal 855)
-        cyphertext = encrypt_plaintext(T, E, N);
-        printf("Computed cypher text: %llu\n", cyphertext);
+        cyphertext = multiply_and_square(T, E, N);
+        // printf("Computed cypher text: %llu\n", cyphertext);
 
         // Decrypt cyphertext (should equal 123)
-        decrypted_plaintext = decrypt_cyphertext(cyphertext, D, N);
-        printf("Computed plain text: %llu\n", decrypted_plaintext);
+        decrypted_plaintext = multiply_and_square(cyphertext, D, N);
+        // printf("Computed plain text: %llu\n", decrypted_plaintext);
 
         // Final assertions that calculations were correct
         assert(855 == cyphertext);
