@@ -13,7 +13,7 @@ int get_num_bits(uint64_t num)
 }
 
 // Applied software optimization techniques such as
-// * loop unrolling
+// * software pipelining
 // * registers
 // * try optimizing the for loop 
 uint64_t montgomery_modular_multiplication(uint64_t X, uint64_t Y, uint64_t M) 
