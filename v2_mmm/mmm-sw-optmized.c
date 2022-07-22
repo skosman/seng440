@@ -16,19 +16,18 @@ int get_num_bits(uint64_t num)
 // * software pipelining
 // * registers
 // * try optimizing the for loop 
-uint64_t montgomery_modular_multiplication(uint64_t X, uint64_t Y, uint64_t M) 
+uint64_t montgomery_modular_multiplication(uint64_t X, uint64_t Y, uint64_t M, int m) 
 {
     register int i;
     register uint64_t T;
     register uint64_t Xi;
     register uint64_t Y0;
     register uint64_t eta;
-
-    register uint64_t m = get_num_bits(M);
     
     T = 0;
     Y0 = Y & 1;
     Xi = X & 1;
+    
     for (i = 0; i < m ; i++) {
         eta = (T & 1) ^ (Xi & Y0);
         T = (T + (Xi * Y) + (eta * M)) >> 1;
@@ -46,30 +45,30 @@ uint64_t montgomery_modular_multiplication(uint64_t X, uint64_t Y, uint64_t M)
 // using montgomery modular multiplication for any modular multiplication operations
 uint64_t multiply_and_square(uint64_t X, uint64_t Y, uint64_t M)  
 {
-    register uint64_t num_bits = get_num_bits(M);
-    register uint64_t R = (1 << num_bits) % M;
+    register uint64_t m = get_num_bits(M);
+    register uint64_t R = (1 << m) % M;
     uint64_t R2 = multiply_and_divide_by_modulus(R, R, M);
 
     register uint64_t T = R;
     // Scale the operand up with R
-    register uint64_t X_scaled = montgomery_modular_multiplication(X, R2, M);
+    register uint64_t X_scaled = montgomery_modular_multiplication(X, R2, M, m);
     while (0 != Y)
     {
         if (Y & 0x01) 
         {
-          T = montgomery_modular_multiplication(X_scaled, T, M);
+          T = montgomery_modular_multiplication(X_scaled, T, M, m);
         }
         else
         {
             // No action
         }
 
-        X_scaled = montgomery_modular_multiplication(X_scaled, X_scaled, M);
+        X_scaled = montgomery_modular_multiplication(X_scaled, X_scaled, M, m);
         Y >>=1;
     }
 
     // Scale down the result
-    T = montgomery_modular_multiplication(T, 1, M);
+    T = montgomery_modular_multiplication(T, 1, M, m);
 
     return T;
 }
