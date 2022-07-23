@@ -5,20 +5,19 @@
 #define TEST_ITERATIONS 100000
 #define multiply_and_divide_by_modulus(x,y,z) ((x)*(y)) % (z)
 
-int get_num_bits(uint64_t num) 
+uint32_t get_num_bits(uint64_t num) 
 {
-    register int i = 0;
+    register uint32_t i = 0;
     for (i=0; num!=0; ++i) num >>= 1;
     return i;
 }
 
 // Applied software optimization techniques such as
-// * software pipelining
+// * loop unrolling
 // * registers
-// * try optimizing the for loop 
-uint64_t montgomery_modular_multiplication(uint64_t X, uint64_t Y, uint64_t M, int m) 
+uint64_t montgomery_modular_multiplication(uint64_t X, uint64_t Y, uint64_t M, uint32_t m) 
 {
-    register int i;
+    register uint32_t i;
     register uint64_t T;
     register uint64_t Xi;
     register uint64_t Y0;
@@ -26,16 +25,31 @@ uint64_t montgomery_modular_multiplication(uint64_t X, uint64_t Y, uint64_t M, i
     
     T = 0;
     Y0 = Y & 1;
-    Xi = X & 1;
     
-    for (i = 0; i < m ; i++) {
+    for (i = 0; i < m; i+=4) {
+        Xi = (X >> (i)) & 1;
         eta = (T & 1) ^ (Xi & Y0);
         T = (T + (Xi * Y) + (eta * M)) >> 1;
+
         Xi = (X >> (i+1)) & 1;
+        eta = (T & 1) ^ (Xi & Y0);
+        T = (T + (Xi * Y) + (eta * M)) >> 1;
+
+        Xi = (X >> (i+2)) & 1;
+        eta = (T & 1) ^ (Xi & Y0);
+        T = (T + (Xi * Y) + (eta * M)) >> 1;
+
+        Xi = (X >> (i+3)) & 1;
+        eta = (T & 1) ^ (Xi & Y0);
+        T = (T + (Xi * Y) + (eta * M)) >> 1;
     }
     
     if (T >= M) {
         T = T - M;
+    } 
+    else
+    {
+        // No action
     }
 
     return T;
@@ -45,7 +59,7 @@ uint64_t montgomery_modular_multiplication(uint64_t X, uint64_t Y, uint64_t M, i
 // using montgomery modular multiplication for any modular multiplication operations
 uint64_t multiply_and_square(uint64_t X, uint64_t Y, uint64_t M)  
 {
-    register uint64_t m = get_num_bits(M);
+    register uint32_t m = get_num_bits(M);
     register uint64_t R = (1 << m) % M;
     uint64_t R2 = multiply_and_divide_by_modulus(R, R, M);
 

@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include <assert.h>
 
-#define TEST_ITERATIONS 10000000
+#define TEST_ITERATIONS 100000
 #define multiply_and_divide_by_modulus(x,y,z) ((x)*(y)) % (z)
 
 uint64_t get_num_bits(uint64_t num) 
@@ -32,6 +32,10 @@ uint64_t montgomery_modular_multiplication(uint64_t X, uint64_t Y, uint64_t M, u
     if (T >= M) {
         T = T - M;
     }
+    else
+    {
+        // No action
+    }
     return T;
 }
 
@@ -39,7 +43,6 @@ uint64_t montgomery_modular_multiplication(uint64_t X, uint64_t Y, uint64_t M, u
 // using montgomery modular multiplication for any modular multiplication operations
 uint64_t multiply_and_square(uint64_t X, uint64_t Y, uint64_t M)  
 {
-    // uint64_t num_bits = get_num_bits(M);
     uint64_t m = get_num_bits(M);
     uint64_t R = (1 << m) % M;
     uint64_t R2 = multiply_and_divide_by_modulus(R, R, M);
