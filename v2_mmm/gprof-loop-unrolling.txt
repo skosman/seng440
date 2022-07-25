@@ -3,16 +3,16 @@ Flat profile:
 Each sample counts as 0.01 seconds.
   %   cumulative   self              self     total           
  time   seconds   seconds    calls   s/call   s/call  name    
- 44.76      0.94     0.94  2800000     0.00     0.00  montgomery_modular_multiplication
- 30.95      1.59     0.65                             mcount_internal
-  9.52      1.79     0.20                             __gnu_mcount_nc
-  7.14      1.94     0.15   200000     0.00     0.00  multiply_and_square
-  3.33      2.01     0.07                             __udivdi3
-  1.90      2.05     0.04   200000     0.00     0.00  get_num_bits
-  1.43      2.08     0.03                             __aeabi_uidivmod
-  0.48      2.09     0.01        1     0.01     1.14  loop_encrypt_decrypt_routine
-  0.48      2.10     0.01                             __gnu_uldivmod_helper
-  0.00      2.10     0.00        1     0.00     1.14  main
+ 58.78      0.87     0.87  2800000     0.00     0.00  montgomery_modular_multiplication
+ 12.84      1.06     0.19   200000     0.00     0.00  multiply_and_square
+ 12.84      1.25     0.19                             __gnu_mcount_nc
+  3.38      1.30     0.05                             __aeabi_uidivmod
+  3.38      1.35     0.05                             __aeabi_uldivmod
+  3.38      1.40     0.05                             __udivsi3
+  2.70      1.44     0.04                             __udivdi3
+  2.03      1.47     0.03        1     0.03     1.10  loop_encrypt_decrypt_routine
+  0.68      1.48     0.01   200000     0.00     0.00  get_num_bits
+  0.00      1.48     0.00        1     0.00     1.10  main
 
  %         the percentage of the total running time of the
 time       program used by this function.
@@ -50,46 +50,46 @@ notice and this notice are preserved.
 		     Call graph (explanation follows)
 
 
-granularity: each sample hit covers 4 byte(s) for 0.48% of 2.10 seconds
+granularity: each sample hit covers 4 byte(s) for 0.68% of 1.48 seconds
 
 index % time    self  children    called     name
-                0.01    1.13       1/1           main [2]
-[1]     54.3    0.01    1.13       1         loop_encrypt_decrypt_routine [1]
-                0.15    0.98  200000/200000      multiply_and_square [4]
+                0.03    1.07       1/1           main [2]
+[1]     74.3    0.03    1.07       1         loop_encrypt_decrypt_routine [1]
+                0.19    0.88  200000/200000      multiply_and_square [4]
 -----------------------------------------------
-                0.00    1.14       1/1           __libc_start_main [3]
-[2]     54.3    0.00    1.14       1         main [2]
-                0.01    1.13       1/1           loop_encrypt_decrypt_routine [1]
------------------------------------------------
-                                                 <spontaneous>
-[3]     54.3    0.00    1.14                 __libc_start_main [3]
-                0.00    1.14       1/1           main [2]
------------------------------------------------
-                0.15    0.98  200000/200000      loop_encrypt_decrypt_routine [1]
-[4]     53.8    0.15    0.98  200000         multiply_and_square [4]
-                0.94    0.00 2800000/2800000     montgomery_modular_multiplication [5]
-                0.04    0.00  200000/200000      get_num_bits [9]
------------------------------------------------
-                0.94    0.00 2800000/2800000     multiply_and_square [4]
-[5]     44.8    0.94    0.00 2800000         montgomery_modular_multiplication [5]
+                0.00    1.10       1/1           __libc_start_main [3]
+[2]     74.3    0.00    1.10       1         main [2]
+                0.03    1.07       1/1           loop_encrypt_decrypt_routine [1]
 -----------------------------------------------
                                                  <spontaneous>
-[6]     31.0    0.65    0.00                 mcount_internal [6]
+[3]     74.3    0.00    1.10                 __libc_start_main [3]
+                0.00    1.10       1/1           main [2]
+-----------------------------------------------
+                0.19    0.88  200000/200000      loop_encrypt_decrypt_routine [1]
+[4]     72.3    0.19    0.88  200000         multiply_and_square [4]
+                0.87    0.00 2800000/2800000     montgomery_modular_multiplication [5]
+                0.01    0.00  200000/200000      get_num_bits [11]
+-----------------------------------------------
+                0.87    0.00 2800000/2800000     multiply_and_square [4]
+[5]     58.8    0.87    0.00 2800000         montgomery_modular_multiplication [5]
 -----------------------------------------------
                                                  <spontaneous>
-[7]      9.5    0.20    0.00                 __gnu_mcount_nc [7]
+[6]     12.8    0.19    0.00                 __gnu_mcount_nc [6]
 -----------------------------------------------
                                                  <spontaneous>
-[8]      3.3    0.07    0.00                 __udivdi3 [8]
------------------------------------------------
-                0.04    0.00  200000/200000      multiply_and_square [4]
-[9]      1.9    0.04    0.00  200000         get_num_bits [9]
+[7]      3.4    0.05    0.00                 __aeabi_uidivmod [7]
 -----------------------------------------------
                                                  <spontaneous>
-[10]     1.4    0.03    0.00                 __aeabi_uidivmod [10]
+[8]      3.4    0.05    0.00                 __aeabi_uldivmod [8]
 -----------------------------------------------
                                                  <spontaneous>
-[11]     0.5    0.01    0.00                 __gnu_uldivmod_helper [11]
+[9]      3.4    0.05    0.00                 __udivsi3 [9]
+-----------------------------------------------
+                                                 <spontaneous>
+[10]     2.7    0.04    0.00                 __udivdi3 [10]
+-----------------------------------------------
+                0.01    0.00  200000/200000      multiply_and_square [4]
+[11]     0.7    0.01    0.00  200000         get_num_bits [11]
 -----------------------------------------------
 
  This table describes the call tree of the program, and was sorted by
@@ -182,7 +182,7 @@ notice and this notice are preserved.
 
 Index by function name
 
-  [10] __aeabi_uidivmod        [9] get_num_bits            [5] montgomery_modular_multiplication
-   [7] __gnu_mcount_nc         [1] loop_encrypt_decrypt_routine [4] multiply_and_square
-  [11] __gnu_uldivmod_helper   [2] main
-   [8] __udivdi3               [6] mcount_internal
+   [7] __aeabi_uidivmod        [9] __udivsi3               [5] montgomery_modular_multiplication
+   [8] __aeabi_uldivmod       [11] get_num_bits            [4] multiply_and_square
+   [6] __gnu_mcount_nc         [1] loop_encrypt_decrypt_routine
+  [10] __udivdi3               [2] main
