@@ -12,7 +12,7 @@ uint64_t get_num_bits(uint64_t num)
     return i;
 }
 
-uint64_t montgomery_modular_multiplication(uint64_t X, uint64_t Y, uint64_t M, uint64_t m) 
+uint64_t montgomery_modular_multiplication(uint64_t X, uint64_t Y, uint64_t M) 
 {
     uint64_t i;
     uint64_t T;
@@ -22,6 +22,8 @@ uint64_t montgomery_modular_multiplication(uint64_t X, uint64_t Y, uint64_t M, u
     
     T = 0;
     Y0 = Y & 1;
+
+    uint64_t m = get_num_bits(M);
 
     for (i = 0; i < m; ++i) {
         Xi = (X >> i) & 1;
@@ -49,25 +51,25 @@ uint64_t multiply_and_square(uint64_t X, uint64_t Y, uint64_t M)
 
     uint64_t T = R;
     // Scale the operand up with R
-    uint64_t X_scaled = montgomery_modular_multiplication(X, R2, M, m);
+    uint64_t X_scaled = montgomery_modular_multiplication(X, R2, M);
 
     while (0 != Y)
     {
         if (0x01 & Y) 
         {
-          T = montgomery_modular_multiplication(X_scaled, T, M, m);
+          T = montgomery_modular_multiplication(X_scaled, T, M);
         }
         else
         {
             // No action
         }
 
-        X_scaled = montgomery_modular_multiplication(X_scaled, X_scaled, M, m);
+        X_scaled = montgomery_modular_multiplication(X_scaled, X_scaled, M);
         Y >>=1;
     }
 
     // Scale down the result
-    T = montgomery_modular_multiplication(T, 1, M, m);
+    T = montgomery_modular_multiplication(T, 1, M);
     return T;
 }
 
