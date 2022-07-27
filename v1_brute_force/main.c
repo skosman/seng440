@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <assert.h>
+#include <time.h>
 
 #define TEST_ITERATIONS 10000000
 
@@ -71,6 +72,9 @@ int main()
     uint64_t input_plaintext;
     uint64_t cyphertext;
     uint64_t decrypted_plaintext;
+
+    // Output number of processor clocks per second
+    printf("Processor clocks per second: %d\n", CLOCKS_PER_SEC);
 
     // Prime numbers used to generate N, and private and public key. 
     P = 61;
