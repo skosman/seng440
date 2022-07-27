@@ -1,18 +1,18 @@
-[anikitenko@seng440 analysis]$ gprof
 Flat profile:
 
 Each sample counts as 0.01 seconds.
   %   cumulative   self              self     total           
  time   seconds   seconds    calls  ms/call  ms/call  name    
- 44.12      0.82     0.82                             __udivsi3
- 22.06      1.23     0.41                             __udivdi3
- 14.53      1.50     0.27   200000     0.00     0.00  calculate_modular_exponentiation
-  8.07      1.65     0.15                             __aeabi_uidivmod
-  6.73      1.78     0.13                             __gnu_uldivmod_helper
-  2.69      1.83     0.05                             __aeabi_uldivmod
-  1.08      1.85     0.02                             __divdi3
-  0.54      1.86     0.01        1    10.01   280.23  loop_encrypt_decrypt_routine
-  0.27      1.86     0.01                             __aeabi_idiv0
+ 31.46      0.56     0.56                             __udivdi3
+ 29.21      1.08     0.52                             __udivsi3
+ 18.54      1.41     0.33                             __aeabi_uidivmod
+  8.43      1.56     0.15                             __aeabi_uldivmod
+  6.74      1.68     0.12                             __gnu_uldivmod_helper
+  3.93      1.75     0.07   200000     0.00     0.00  calculate_modular_exponentiation
+  1.12      1.77     0.02                             mcount_internal
+  0.56      1.78     0.01                             __gnu_mcount_nc
+  0.00      1.78     0.00        1     0.00    70.00  loop_encrypt_decrypt_routine
+  0.00      1.78     0.00        1     0.00    70.00  main
 
  %         the percentage of the total running time of the
 time       program used by this function.
@@ -52,40 +52,44 @@ notice and this notice are preserved.
 		     Call graph (explanation follows)
 
 
-granularity: each sample hit covers 2 byte(s) for 0.54% of 1.86 seconds
+granularity: each sample hit covers 4 byte(s) for 0.56% of 1.78 seconds
 
 index % time    self  children    called     name
                                                  <spontaneous>
-[1]     44.1    0.82    0.00                 __udivsi3 [1]
+[1]     31.5    0.56    0.00                 __udivdi3 [1]
 -----------------------------------------------
                                                  <spontaneous>
-[2]     22.0    0.41    0.00                 __udivdi3 [2]
------------------------------------------------
-                0.01    0.27       1/1           main [4]
-[3]     15.1    0.01    0.27       1         loop_encrypt_decrypt_routine [3]
-                0.27    0.00  200000/200000      calculate_modular_exponentiation [5]
+[2]     29.2    0.52    0.00                 __udivsi3 [2]
 -----------------------------------------------
                                                  <spontaneous>
-[4]     15.1    0.00    0.28                 main [4]
-                0.01    0.27       1/1           loop_encrypt_decrypt_routine [3]
------------------------------------------------
-                0.27    0.00  200000/200000      loop_encrypt_decrypt_routine [3]
-[5]     14.5    0.27    0.00  200000         calculate_modular_exponentiation [5]
+[3]     18.5    0.33    0.00                 __aeabi_uidivmod [3]
 -----------------------------------------------
                                                  <spontaneous>
-[6]      8.1    0.15    0.00                 __aeabi_uidivmod [6]
+[4]      8.4    0.15    0.00                 __aeabi_uldivmod [4]
 -----------------------------------------------
                                                  <spontaneous>
-[7]      6.7    0.13    0.00                 __gnu_uldivmod_helper [7]
+[5]      6.7    0.12    0.00                 __gnu_uldivmod_helper [5]
+-----------------------------------------------
+                0.07    0.00  200000/200000      loop_encrypt_decrypt_routine [7]
+[6]      3.9    0.07    0.00  200000         calculate_modular_exponentiation [6]
+-----------------------------------------------
+                0.00    0.07       1/1           main [8]
+[7]      3.9    0.00    0.07       1         loop_encrypt_decrypt_routine [7]
+                0.07    0.00  200000/200000      calculate_modular_exponentiation [6]
+-----------------------------------------------
+                0.00    0.07       1/1           __libc_start_main [9]
+[8]      3.9    0.00    0.07       1         main [8]
+                0.00    0.07       1/1           loop_encrypt_decrypt_routine [7]
 -----------------------------------------------
                                                  <spontaneous>
-[8]      2.7    0.05    0.00                 __aeabi_uldivmod [8]
+[9]      3.9    0.00    0.07                 __libc_start_main [9]
+                0.00    0.07       1/1           main [8]
 -----------------------------------------------
                                                  <spontaneous>
-[9]      1.1    0.02    0.00                 __divdi3 [9]
+[10]     1.1    0.02    0.00                 mcount_internal [10]
 -----------------------------------------------
                                                  <spontaneous>
-[10]     0.3    0.01    0.00                 __aeabi_idiv0 [10]
+[11]     0.6    0.01    0.00                 __gnu_mcount_nc [11]
 -----------------------------------------------
 
  This table describes the call tree of the program, and was sorted by
@@ -180,7 +184,7 @@ notice and this notice are preserved.
 
 Index by function name
 
-  [10] __aeabi_idiv0           [9] __divdi3                [1] __udivsi3
-   [6] __aeabi_uidivmod        [7] __gnu_uldivmod_helper   [5] calculate_modular_exponentiation
-   [8] __aeabi_uldivmod        [2] __udivdi3               [3] loop_encrypt_decrypt_routine
-[anikitenko@seng440 analysis]
+   [3] __aeabi_uidivmod        [1] __udivdi3               [8] main
+   [4] __aeabi_uldivmod        [2] __udivsi3              [10] mcount_internal
+  [11] __gnu_mcount_nc         [6] calculate_modular_exponentiation
+   [5] __gnu_uldivmod_helper   [7] loop_encrypt_decrypt_routine

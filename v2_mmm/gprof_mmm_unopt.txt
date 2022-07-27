@@ -3,17 +3,18 @@ Flat profile:
 Each sample counts as 0.01 seconds.
   %   cumulative   self              self     total           
  time   seconds   seconds    calls   s/call   s/call  name    
- 79.08      8.39     8.39  2800000     0.00     0.00  montgomery_modular_multiplication
- 17.26     10.22     1.83  3000000     0.00     0.00  get_num_bits
-  1.51     10.38     0.16   200000     0.00     0.00  multiply_and_square
-  0.94     10.48     0.10                             __udivsi3
-  0.75     10.56     0.08                             __udivdi3
-  0.19     10.58     0.02                             __aeabi_uidivmod
-  0.14     10.60     0.02                             __gnu_uldivmod_helper
-  0.09     10.61     0.01                             __divdi3
-  0.05     10.61     0.01                             __aeabi_idiv0
-  0.05     10.62     0.01                             frame_dummy
-  0.00     10.62     0.00        1     0.00    10.38  loop_encrypt_decrypt_routine
+ 38.40      1.49     1.49                             mcount_internal
+ 33.51      2.79     1.30  2800000     0.00     0.00  montgomery_modular_multiplication
+ 10.31      3.19     0.40                             __gnu_mcount_nc
+  8.76      3.53     0.34  3000000     0.00     0.00  get_num_bits
+  3.87      3.68     0.15   200000     0.00     0.00  multiply_and_square
+  2.32      3.77     0.09                             __udivdi3
+  1.29      3.82     0.05                             __udivsi3
+  0.52      3.84     0.02                             __aeabi_uidivmod
+  0.52      3.86     0.02                             __aeabi_uldivmod
+  0.52      3.88     0.02                             __gnu_uldivmod_helper
+  0.00      3.88     0.00        1     0.00     1.79  loop_encrypt_decrypt_routine
+  0.00      3.88     0.00        1     0.00     1.79  main
 
  %         the percentage of the total running time of the
 time       program used by this function.
@@ -41,60 +42,66 @@ name       the name of the function.  This is the minor sort
 	   the function in the gprof listing. If the index is
 	   in parenthesis it shows where it would appear in
 	   the gprof listing if it were to be printed.
-
+
+
 Copyright (C) 2012-2016 Free Software Foundation, Inc.
 
 Copying and distribution of this file, with or without modification,
 are permitted in any medium without royalty provided the copyright
 notice and this notice are preserved.
-
+
+
 		     Call graph (explanation follows)
 
 
-granularity: each sample hit covers 2 byte(s) for 0.09% of 10.62 seconds
+granularity: each sample hit covers 4 byte(s) for 0.26% of 3.88 seconds
 
 index % time    self  children    called     name
-                0.16   10.22  200000/200000      loop_encrypt_decrypt_routine [2]
-[1]     97.8    0.16   10.22  200000         multiply_and_square [1]
-                8.39    1.71 2800000/2800000     montgomery_modular_multiplication [4]
-                0.12    0.00  200000/3000000     get_num_bits [5]
+                0.15    1.64  200000/200000      loop_encrypt_decrypt_routine [2]
+[1]     46.1    0.15    1.64  200000         multiply_and_square [1]
+                1.30    0.32 2800000/2800000     montgomery_modular_multiplication [5]
+                0.02    0.00  200000/3000000     get_num_bits [8]
 -----------------------------------------------
-                0.00   10.38       1/1           main [3]
-[2]     97.8    0.00   10.38       1         loop_encrypt_decrypt_routine [2]
-                0.16   10.22  200000/200000      multiply_and_square [1]
+                0.00    1.79       1/1           main [3]
+[2]     46.1    0.00    1.79       1         loop_encrypt_decrypt_routine [2]
+                0.15    1.64  200000/200000      multiply_and_square [1]
 -----------------------------------------------
-                                                 <spontaneous>
-[3]     97.8    0.00   10.38                 main [3]
-                0.00   10.38       1/1           loop_encrypt_decrypt_routine [2]
------------------------------------------------
-                8.39    1.71 2800000/2800000     multiply_and_square [1]
-[4]     95.1    8.39    1.71 2800000         montgomery_modular_multiplication [4]
-                1.71    0.00 2800000/3000000     get_num_bits [5]
------------------------------------------------
-                0.12    0.00  200000/3000000     multiply_and_square [1]
-                1.71    0.00 2800000/3000000     montgomery_modular_multiplication [4]
-[5]     17.2    1.83    0.00 3000000         get_num_bits [5]
+                0.00    1.79       1/1           __libc_start_main [4]
+[3]     46.1    0.00    1.79       1         main [3]
+                0.00    1.79       1/1           loop_encrypt_decrypt_routine [2]
 -----------------------------------------------
                                                  <spontaneous>
-[6]      0.9    0.10    0.00                 __udivsi3 [6]
+[4]     46.1    0.00    1.79                 __libc_start_main [4]
+                0.00    1.79       1/1           main [3]
+-----------------------------------------------
+                1.30    0.32 2800000/2800000     multiply_and_square [1]
+[5]     41.7    1.30    0.32 2800000         montgomery_modular_multiplication [5]
+                0.32    0.00 2800000/3000000     get_num_bits [8]
 -----------------------------------------------
                                                  <spontaneous>
-[7]      0.8    0.08    0.00                 __udivdi3 [7]
+[6]     38.4    1.49    0.00                 mcount_internal [6]
 -----------------------------------------------
                                                  <spontaneous>
-[8]      0.2    0.02    0.00                 __aeabi_uidivmod [8]
+[7]     10.3    0.40    0.00                 __gnu_mcount_nc [7]
+-----------------------------------------------
+                0.02    0.00  200000/3000000     multiply_and_square [1]
+                0.32    0.00 2800000/3000000     montgomery_modular_multiplication [5]
+[8]      8.8    0.34    0.00 3000000         get_num_bits [8]
 -----------------------------------------------
                                                  <spontaneous>
-[9]      0.1    0.02    0.00                 __gnu_uldivmod_helper [9]
+[9]      2.3    0.09    0.00                 __udivdi3 [9]
 -----------------------------------------------
                                                  <spontaneous>
-[10]     0.1    0.01    0.00                 __divdi3 [10]
+[10]     1.3    0.05    0.00                 __udivsi3 [10]
 -----------------------------------------------
                                                  <spontaneous>
-[11]     0.0    0.01    0.00                 frame_dummy [11]
+[11]     0.5    0.02    0.00                 __aeabi_uidivmod [11]
 -----------------------------------------------
                                                  <spontaneous>
-[12]     0.0    0.01    0.00                 __aeabi_idiv0 [12]
+[12]     0.5    0.02    0.00                 __aeabi_uldivmod [12]
+-----------------------------------------------
+                                                 <spontaneous>
+[13]     0.5    0.02    0.00                 __gnu_uldivmod_helper [13]
 -----------------------------------------------
 
  This table describes the call tree of the program, and was sorted by
@@ -178,16 +185,18 @@ index % time    self  children    called     name
  were internal to the cycle, and the calls entry for each member shows,
  for that member, how many times it was called from other members of
  the cycle.
-
+
+
 Copyright (C) 2012-2016 Free Software Foundation, Inc.
 
 Copying and distribution of this file, with or without modification,
 are permitted in any medium without royalty provided the copyright
 notice and this notice are preserved.
-
+
+
 Index by function name
 
-  [12] __aeabi_idiv0           [7] __udivdi3               [2] loop_encrypt_decrypt_routine
-   [8] __aeabi_uidivmod        [6] __udivsi3               [4] montgomery_modular_multiplication
-  [10] __divdi3               [11] frame_dummy             [1] multiply_and_square
-   [9] __gnu_uldivmod_helper   [5] get_num_bits
+  [11] __aeabi_uidivmod        [9] __udivdi3               [3] main
+  [12] __aeabi_uldivmod       [10] __udivsi3               [6] mcount_internal
+   [7] __gnu_mcount_nc         [8] get_num_bits            [5] montgomery_modular_multiplication
+  [13] __gnu_uldivmod_helper   [2] loop_encrypt_decrypt_routine [1] multiply_and_square

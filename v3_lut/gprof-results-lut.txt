@@ -1,20 +1,21 @@
-[anikitenko@seng440 analysis]$ gprof
 Flat profile:
 
 Each sample counts as 0.01 seconds.
   %   cumulative   self              self     total           
  time   seconds   seconds    calls  ms/call  ms/call  name    
- 32.61      0.15     0.15                             __udivdi3
- 21.74      0.25     0.10                             __udivsi3
- 19.57      0.34     0.09                             __gnu_uldivmod_helper
- 10.87      0.39     0.05   200000     0.00     0.00  compute_modular_exponentiation_with_lut
-  6.52      0.42     0.03                             __aeabi_uidivmod
-  4.35      0.44     0.02                             __aeabi_uldivmod
-  2.17      0.45     0.01   100000     0.00     0.00  decrypt_cyphertext
-  2.17      0.46     0.01   100000     0.00     0.00  encrypt_plaintext
-  0.00      0.46     0.00        2     0.00     0.00  compute_lookup_table
-  0.00      0.46     0.00        2     0.00     0.00  compute_powers_of_two
-  0.00      0.46     0.00        1     0.00    70.00  loop_encrypt_decrypt_routine
+ 34.09      0.15     0.15                             mcount_internal
+ 18.18      0.23     0.08                             __udivdi3
+ 15.91      0.30     0.07                             __udivsi3
+ 11.36      0.35     0.05                             __aeabi_uidivmod
+  6.82      0.38     0.03                             __aeabi_uldivmod
+  4.55      0.40     0.02        1    20.00    40.00  loop_encrypt_decrypt_routine
+  4.55      0.42     0.02                             __gnu_mcount_nc
+  2.27      0.43     0.01   200000     0.00     0.00  compute_modular_exponentiation_with_lut
+  2.27      0.44     0.01   100000     0.00     0.00  decrypt_cyphertext
+  0.00      0.44     0.00   100000     0.00     0.00  encrypt_plaintext
+  0.00      0.44     0.00        2     0.00     0.00  compute_lookup_table
+  0.00      0.44     0.00        2     0.00     0.00  compute_powers_of_two
+  0.00      0.44     0.00        1     0.00    40.00  main
 
  %         the percentage of the total running time of the
 time       program used by this function.
@@ -54,52 +55,59 @@ notice and this notice are preserved.
 		     Call graph (explanation follows)
 
 
-granularity: each sample hit covers 4 byte(s) for 2.17% of 0.46 seconds
+granularity: each sample hit covers 4 byte(s) for 2.27% of 0.44 seconds
 
 index % time    self  children    called     name
                                                  <spontaneous>
-[1]     32.6    0.15    0.00                 __udivdi3 [1]
+[1]     34.1    0.15    0.00                 mcount_internal [1]
 -----------------------------------------------
                                                  <spontaneous>
-[2]     21.7    0.10    0.00                 __udivsi3 [2]
+[2]     18.2    0.08    0.00                 __udivdi3 [2]
 -----------------------------------------------
                                                  <spontaneous>
-[3]     19.6    0.09    0.00                 __gnu_uldivmod_helper [3]
------------------------------------------------
-                0.00    0.07       1/1           main [5]
-[4]     15.2    0.00    0.07       1         loop_encrypt_decrypt_routine [4]
-                0.01    0.03  100000/100000      encrypt_plaintext [8]
-                0.01    0.03  100000/100000      decrypt_cyphertext [7]
+[3]     15.9    0.07    0.00                 __udivsi3 [3]
 -----------------------------------------------
                                                  <spontaneous>
-[5]     15.2    0.00    0.07                 main [5]
-                0.00    0.07       1/1           loop_encrypt_decrypt_routine [4]
-                0.00    0.00       2/2           compute_powers_of_two [12]
-                0.00    0.00       2/2           compute_lookup_table [11]
+[4]     11.4    0.05    0.00                 __aeabi_uidivmod [4]
 -----------------------------------------------
-                0.03    0.00  100000/200000      encrypt_plaintext [8]
-                0.03    0.00  100000/200000      decrypt_cyphertext [7]
-[6]     10.9    0.05    0.00  200000         compute_modular_exponentiation_with_lut [6]
+                0.02    0.02       1/1           main [6]
+[5]      9.1    0.02    0.02       1         loop_encrypt_decrypt_routine [5]
+                0.01    0.01  100000/100000      decrypt_cyphertext [10]
+                0.00    0.01  100000/100000      encrypt_plaintext [12]
 -----------------------------------------------
-                0.01    0.03  100000/100000      loop_encrypt_decrypt_routine [4]
-[7]      7.6    0.01    0.03  100000         decrypt_cyphertext [7]
-                0.03    0.00  100000/200000      compute_modular_exponentiation_with_lut [6]
------------------------------------------------
-                0.01    0.03  100000/100000      loop_encrypt_decrypt_routine [4]
-[8]      7.6    0.01    0.03  100000         encrypt_plaintext [8]
-                0.03    0.00  100000/200000      compute_modular_exponentiation_with_lut [6]
+                0.00    0.04       1/1           __libc_start_main [7]
+[6]      9.1    0.00    0.04       1         main [6]
+                0.02    0.02       1/1           loop_encrypt_decrypt_routine [5]
+                0.00    0.00       2/2           compute_powers_of_two [14]
+                0.00    0.00       2/2           compute_lookup_table [13]
 -----------------------------------------------
                                                  <spontaneous>
-[9]      6.5    0.03    0.00                 __aeabi_uidivmod [9]
+[7]      9.1    0.00    0.04                 __libc_start_main [7]
+                0.00    0.04       1/1           main [6]
 -----------------------------------------------
                                                  <spontaneous>
-[10]     4.3    0.02    0.00                 __aeabi_uldivmod [10]
+[8]      6.8    0.03    0.00                 __aeabi_uldivmod [8]
 -----------------------------------------------
-                0.00    0.00       2/2           main [5]
-[11]     0.0    0.00    0.00       2         compute_lookup_table [11]
+                                                 <spontaneous>
+[9]      4.5    0.02    0.00                 __gnu_mcount_nc [9]
 -----------------------------------------------
-                0.00    0.00       2/2           main [5]
-[12]     0.0    0.00    0.00       2         compute_powers_of_two [12]
+                0.01    0.01  100000/100000      loop_encrypt_decrypt_routine [5]
+[10]     3.4    0.01    0.01  100000         decrypt_cyphertext [10]
+                0.01    0.00  100000/200000      compute_modular_exponentiation_with_lut [11]
+-----------------------------------------------
+                0.01    0.00  100000/200000      encrypt_plaintext [12]
+                0.01    0.00  100000/200000      decrypt_cyphertext [10]
+[11]     2.3    0.01    0.00  200000         compute_modular_exponentiation_with_lut [11]
+-----------------------------------------------
+                0.00    0.01  100000/100000      loop_encrypt_decrypt_routine [5]
+[12]     1.1    0.00    0.01  100000         encrypt_plaintext [12]
+                0.01    0.00  100000/200000      compute_modular_exponentiation_with_lut [11]
+-----------------------------------------------
+                0.00    0.00       2/2           main [6]
+[13]     0.0    0.00    0.00       2         compute_lookup_table [13]
+-----------------------------------------------
+                0.00    0.00       2/2           main [6]
+[14]     0.0    0.00    0.00       2         compute_powers_of_two [14]
 -----------------------------------------------
 
  This table describes the call tree of the program, and was sorted by
@@ -194,8 +202,8 @@ notice and this notice are preserved.
 
 Index by function name
 
-   [9] __aeabi_uidivmod        [2] __udivsi3               [7] decrypt_cyphertext
-  [10] __aeabi_uldivmod       [11] compute_lookup_table    [8] encrypt_plaintext
-   [3] __gnu_uldivmod_helper   [6] compute_modular_exponentiation_with_lut [4] loop_encrypt_decrypt_routine
-   [1] __udivdi3              [12] compute_powers_of_two
-[anikitenko@seng440 analysis]$
+   [4] __aeabi_uidivmod       [13] compute_lookup_table    [5] loop_encrypt_decrypt_routine
+   [8] __aeabi_uldivmod       [11] compute_modular_exponentiation_with_lut [6] main
+   [9] __gnu_mcount_nc        [14] compute_powers_of_two   [1] mcount_internal
+   [2] __udivdi3              [10] decrypt_cyphertext
+   [3] __udivsi3              [12] encrypt_plaintext
