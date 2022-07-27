@@ -15,6 +15,7 @@ uint32_t get_num_bits(uint64_t num)
 // Applied software optimization techniques such as
 // * software pipelining
 // * registers
+// * optimizing for loop
 uint64_t montgomery_modular_multiplication(uint64_t X, uint64_t Y, uint64_t M, uint32_t m) 
 {
     register uint32_t i;
@@ -27,12 +28,12 @@ uint64_t montgomery_modular_multiplication(uint64_t X, uint64_t Y, uint64_t M, u
     Y0 = Y & 1;
     // Loop Prologue
     Xi = X & 1;
-    m = m +1;
+    m = m + 1;
 
     for (i = 1; i < m; ++i) {
         eta = (T & 1) ^ (Xi & Y0);
         T = (T + (Xi * Y) + (eta * M)) >> 1;
-	Xi = (X >> (i)) & 1;
+	    Xi = (X >> (i)) & 1;
     }
 
     if (T >= M) {
