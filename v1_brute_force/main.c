@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <assert.h>
-#include <time.h>
 
 #define TEST_ITERATIONS 100000
 
@@ -54,8 +53,6 @@ void loop_encrypt_decrypt_routine(uint64_t T, uint64_t E, uint64_t D, uint64_t N
     uint64_t i;
     for (i = 0; i < TEST_ITERATIONS; i++) 
     {
-        start = clock();
-
         // Encrypt plaintext (should equal 855)
         cyphertext = encrypt_plaintext(T, E, N);
         //printf("Computed cypher text: %llu\n", cyphertext);
@@ -67,13 +64,7 @@ void loop_encrypt_decrypt_routine(uint64_t T, uint64_t E, uint64_t D, uint64_t N
         // Final assertions that calculations were correct
         assert(cyphertext == 855);
         assert(decrypted_plaintext == 123);
-        stop = clock();
-        sum = stop - start;
     }
-
-    printf("%ld", sum/TEST_ITERATIONS);
-
-
 }
 
 int main() 
