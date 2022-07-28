@@ -111,6 +111,7 @@ void loop_encrypt_decrypt_routine(uint64_t *powers_of_two_public_exponent, uint6
     register uint64_t decrypted_plaintext;
 
     register uint64_t i;
+    // Barr-C 8.4 Loops - Page 54
     for (i = 0; i < TEST_ITERATIONS; i++) 
     {
         // Encrypt the plain text with the lookup table (should equal 855)

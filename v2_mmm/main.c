@@ -29,10 +29,10 @@ uint64_t montgomery_modular_multiplication(uint64_t X, uint64_t Y, uint64_t M)
 
     uint64_t m = get_num_bits(M);
 
-    // Barr-C 1.4 Parenthese - Page 11
     for (i = 0; i < m; ++i) {
         Xi = (X >> i) & 1;
         eta = (T & 1) ^ (Xi & Y0);
+        // Barr-C 1.4 Parenthese - Page 11
         T = (T + (Xi * Y) + (eta * M)) >> 1;
     }
     
@@ -89,6 +89,7 @@ void loop_encrypt_decrypt_routine(uint64_t T, uint64_t E, uint64_t D, uint64_t N
     uint64_t decrypted_plaintext;
 
     uint64_t i;
+    // Barr-C 8.4 Loops - Page 54
     for (i = 0; i < TEST_ITERATIONS; i++) 
     {
         // Encrypt plaintext (should equal 855)

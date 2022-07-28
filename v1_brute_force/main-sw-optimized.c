@@ -68,6 +68,7 @@ void loop_encrypt_decrypt_routine(uint64_t T, uint64_t E, uint64_t D, uint64_t N
     register uint64_t decrypted_plaintext;
 
     register uint64_t i;
+    // Barr-C 8.4 Loops - Page 54
     for (i = TEST_ITERATIONS; i != 0; i--) 
     {
         // Encrypt plaintext (should equal 855)
