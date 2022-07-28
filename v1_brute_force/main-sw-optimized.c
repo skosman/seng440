@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include <assert.h>
 
-#define TEST_ITERATIONS 10000000
+#define TEST_ITERATIONS 100000
 #define multiply_and_divide_by_modulus(x,y,z) ((x)*(y)) % (z)
 
 // In this example, we use the following optimization techniques:
@@ -52,6 +52,9 @@ uint64_t calculate_modular_exponentiation(uint64_t base, uint64_t exponent, uint
     return R;
 }
 
+
+// Routine used for testing and gathering metrics based on continously
+// computing the cyphertext and decrypted plaintext over a set number of test iterations
 void loop_encrypt_decrypt_routine(uint64_t T, uint64_t E, uint64_t D, uint64_t N)
 {
     register uint64_t cyphertext; 

@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include <assert.h>
 
-#define TEST_ITERATIONS 10000000
+#define TEST_ITERATIONS 100000
 #define MAX_LUT_POWER 12 // corresponds to 2^12 = 4096
 
 uint64_t compute_modular_exponentiation_with_lut(uint64_t *pow_of_two, uint64_t pow_of_two_len, uint64_t *lut, uint64_t lut_len, uint64_t modulus)
@@ -97,6 +97,8 @@ void compute_lookup_table(uint64_t base, uint64_t modulus, uint64_t *lookup_tabl
     }
 }
 
+// Routine used for testing and gathering metrics based on continously
+// computing the cyphertext and decrypted plaintext over a set number of test iterations
 void loop_encrypt_decrypt_routine(uint64_t *powers_of_two_public_exponent, uint64_t *powers_of_two_private_exponent, uint64_t num_of_powers_public_key, uint64_t num_of_powers_private_key, uint64_t *lookup_table_encrypt, uint64_t *lookup_table_decrypt, uint64_t N)
 {
     register uint64_t cyphertext;

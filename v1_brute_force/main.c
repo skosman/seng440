@@ -1,9 +1,8 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <assert.h>
-#include <time.h>
 
-#define TEST_ITERATIONS 10000000
+#define TEST_ITERATIONS 100000
 
 // In this example, no software optimization techniques are implemented.
 
@@ -40,10 +39,16 @@ uint64_t decrypt_cyphertext(uint64_t C, uint64_t D, uint64_t N)
     return calculate_modular_exponentiation(C, D, N);
 }
 
+
+// Routine used for testing and gathering metrics based on continously
+// computing the cyphertext and decrypted plaintext over a set number of test iterations
 void loop_encrypt_decrypt_routine(uint64_t T, uint64_t E, uint64_t D, uint64_t N)
 {
     uint64_t cyphertext; 
     uint64_t decrypted_plaintext;
+    time_t start;
+    time_t stop;
+    time_t sum;
 
     uint64_t i;
     for (i = 0; i < TEST_ITERATIONS; i++) 
@@ -72,9 +77,6 @@ int main()
     uint64_t input_plaintext;
     uint64_t cyphertext;
     uint64_t decrypted_plaintext;
-
-    // Output number of processor clocks per second
-    printf("Processor clocks per second: %d\n", CLOCKS_PER_SEC);
 
     // Prime numbers used to generate N, and private and public key. 
     P = 61;
