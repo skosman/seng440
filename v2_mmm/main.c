@@ -32,7 +32,7 @@ uint64_t montgomery_modular_multiplication(uint64_t X, uint64_t Y, uint64_t M)
     for (i = 0; i < m; ++i) {
         Xi = (X >> i) & 1;
         eta = (T & 1) ^ (Xi & Y0);
-        // Barr-C 1.4 Parenthese - Page 11
+        // Barr-C 1.4 Parentheses - Page 11
         T = (T + (Xi * Y) + (eta * M)) >> 1;
     }
     
