@@ -5,6 +5,7 @@
 #define TEST_ITERATIONS 100000
 #define multiply_and_divide_by_modulus(x,y,z) ((x)*(y)) % (z)
 
+// Returns the number of bits in a number
 uint64_t get_num_bits(uint64_t num) 
 {
     uint64_t i;
@@ -12,6 +13,7 @@ uint64_t get_num_bits(uint64_t num)
     return i;
 }
 
+// We calculate X * Y mod M to be used in the square and multiple algorithm
 uint64_t montgomery_modular_multiplication(uint64_t X, uint64_t Y, uint64_t M) 
 {
     uint64_t i;
@@ -73,6 +75,9 @@ uint64_t multiply_and_square(uint64_t X, uint64_t Y, uint64_t M)
     return T;
 }
 
+
+// Routine used for testing and gathering metrics based on continously
+// computing the cyphertext and decrypted plaintext over a set number of test iterations
 void loop_encrypt_decrypt_routine(uint64_t T, uint64_t E, uint64_t D, uint64_t N)
 {
     uint64_t cyphertext;
