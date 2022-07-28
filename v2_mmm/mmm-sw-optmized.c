@@ -19,7 +19,8 @@ uint32_t get_num_bits(uint64_t num)
 // * optimizing for loop
 uint64_t montgomery_modular_multiplication(uint64_t X, uint64_t Y, uint64_t M, uint32_t m) 
 {   
-    // BARR-C 7.2 Initialization - {age }
+    // Barr-C 8.2 Variable Declarations - Page 51
+    // Barr-C 5.2 Fixed-Width Integers - Page 34
     register uint32_t i;
     register uint64_t T;
     register uint64_t Xi;
@@ -32,6 +33,7 @@ uint64_t montgomery_modular_multiplication(uint64_t X, uint64_t Y, uint64_t M, u
     Xi = X & 1;
     m = m + 1;
 
+    // Barr-C 1.4 Parenthese - Page 11
     for (i = 1; i < m; ++i) {
         eta = (T & 1) ^ (Xi & Y0);
         T = (T + (Xi * Y) + (eta * M)) >> 1;
@@ -107,6 +109,8 @@ void loop_encrypt_decrypt_routine(uint64_t T, uint64_t E, uint64_t D, uint64_t N
 
 int main() 
 {
+    // Barr-C 8.2 Variable Declarations - Page 51
+    // Barr-C 5.2 Fixed-Width Integers - Page 34
     register uint64_t P; 
     register uint64_t Q;
     register uint64_t N;

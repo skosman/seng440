@@ -44,11 +44,10 @@ uint64_t decrypt_cyphertext(uint64_t C, uint64_t D, uint64_t N)
 // computing the cyphertext and decrypted plaintext over a set number of test iterations
 void loop_encrypt_decrypt_routine(uint64_t T, uint64_t E, uint64_t D, uint64_t N)
 {
+    // Barr-C 8.2 Variable Declarations - Page 51
+    // Barr-C 5.2 Fixed-Width Integers - Page 34
     uint64_t cyphertext; 
     uint64_t decrypted_plaintext;
-    time_t start;
-    time_t stop;
-    time_t sum;
 
     uint64_t i;
     for (i = 0; i < TEST_ITERATIONS; i++) 
@@ -69,6 +68,8 @@ void loop_encrypt_decrypt_routine(uint64_t T, uint64_t E, uint64_t D, uint64_t N
 
 int main() 
 {
+    // Barr-C 8.2 Variable Declarations - Page 51
+    // Barr-C 5.2 Fixed-Width Integers - Page 34
     uint64_t P; 
     uint64_t Q;
     uint64_t N;

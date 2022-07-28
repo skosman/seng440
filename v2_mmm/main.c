@@ -16,6 +16,8 @@ uint64_t get_num_bits(uint64_t num)
 // We calculate X * Y mod M to be used in the square and multiple algorithm
 uint64_t montgomery_modular_multiplication(uint64_t X, uint64_t Y, uint64_t M) 
 {
+    // Barr-C 8.2 Variable Declarations - Page 51
+    // Barr-C 5.2 Fixed-Width Integers - Page 34
     uint64_t i;
     uint64_t T;
     uint64_t Xi;
@@ -27,6 +29,7 @@ uint64_t montgomery_modular_multiplication(uint64_t X, uint64_t Y, uint64_t M)
 
     uint64_t m = get_num_bits(M);
 
+    // Barr-C 1.4 Parenthese - Page 11
     for (i = 0; i < m; ++i) {
         Xi = (X >> i) & 1;
         eta = (T & 1) ^ (Xi & Y0);
@@ -102,6 +105,8 @@ void loop_encrypt_decrypt_routine(uint64_t T, uint64_t E, uint64_t D, uint64_t N
 
 int main() 
 {
+    // Barr-C 8.2 Variable Declarations - Page 51
+    // Barr-C 5.2 Fixed-Width Integers - Page 34
     uint64_t P; 
     uint64_t Q;
     uint64_t N;

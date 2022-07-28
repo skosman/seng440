@@ -42,6 +42,8 @@ uint64_t decrypt_cyphertext(uint64_t *pow_of_two, uint64_t pow_of_two_len, uint6
 
 uint64_t compute_powers_of_two(uint64_t num, uint64_t *table, uint64_t table_len)
 {
+    // Barr-C 8.2 Variable Declarations - Page 51
+    // Barr-C 5.2 Fixed-Width Integers - Page 34
     register uint64_t i;
     register uint64_t j;
     register uint64_t temp;
@@ -101,6 +103,8 @@ void compute_lookup_table(uint64_t base, uint64_t modulus, uint64_t *lookup_tabl
 // computing the cyphertext and decrypted plaintext over a set number of test iterations
 void loop_encrypt_decrypt_routine(uint64_t *powers_of_two_public_exponent, uint64_t *powers_of_two_private_exponent, uint64_t num_of_powers_public_key, uint64_t num_of_powers_private_key, uint64_t *lookup_table_encrypt, uint64_t *lookup_table_decrypt, uint64_t N)
 {
+    // Barr-C 8.2 Variable Declarations - Page 51
+    // Barr-C 5.2 Fixed-Width Integers - Page 34
     register uint64_t cyphertext;
     register uint64_t decrypted_plaintext;
 
@@ -123,6 +127,8 @@ void loop_encrypt_decrypt_routine(uint64_t *powers_of_two_public_exponent, uint6
 
 int main() 
 {
+    // Barr-C 8.2 Variable Declarations - Page 51
+    // Barr-C 5.2 Fixed-Width Integers - Page 34
     register uint64_t P; 
     register uint64_t Q;
     register uint64_t N;
