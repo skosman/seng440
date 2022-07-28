@@ -39,6 +39,7 @@ uint64_t montgomery_modular_multiplication(uint64_t X, uint64_t Y, uint64_t M)
     if (T >= M) {
         T = T - M;
     }
+    // MISRA-C if - then - else
     else
     {
         // No action
@@ -64,6 +65,7 @@ uint64_t multiply_and_square(uint64_t X, uint64_t Y, uint64_t M)
         {
           T = montgomery_modular_multiplication(X_scaled, T, M);
         }
+        // MISRA-C if - then - else
         else
         {
             // No action

@@ -57,6 +57,7 @@ uint64_t compute_powers_of_two(uint64_t num, uint64_t *table, uint64_t table_len
             table[j] = i;
             j++;
         }
+        // MISRA-C if - then - else
         else
         {
             // No action.
@@ -75,6 +76,7 @@ uint64_t compute_powers_of_two(uint64_t num, uint64_t *table, uint64_t table_len
             table[j] = i;
             j++;
         }
+        // MISRA-C if - then - else
         else
         {
             // No action.

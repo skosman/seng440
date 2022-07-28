@@ -16,6 +16,7 @@ uint64_t calculate_modular_exponentiation(uint64_t base, uint64_t exponent, uint
         {
             R = (R * base) % modulus;
         } 
+        // MISRA-C if - then - else
         else 
         {
             // No action

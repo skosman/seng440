@@ -14,12 +14,14 @@ uint64_t calculate_modular_exponentiation(uint64_t base, uint64_t exponent, uint
 {
     // We calculate modular exponentiation with multiply-and-square algorithm
     register uint64_t R = 1;
+    // Barr-C 8.6 Equivalnce Tests - Page 56
     while (0 != exponent)
     {
         if (0x01 & exponent)
         {
             R = multiply_and_divide_by_modulus(R, base, modulus);
         }
+        // MISRA-C if - then - else
         else 
         {
             // No action
@@ -27,10 +29,12 @@ uint64_t calculate_modular_exponentiation(uint64_t base, uint64_t exponent, uint
 
         base = multiply_and_divide_by_modulus(base, base, modulus);
         exponent >>=1;
+        // Barr-C 8.6 Equivalnce Tests - Page 56
         if (0 == exponent) 
         {
             break;
         }
+        // MISRA-C if - then - else
         else
         {
             // No action
@@ -41,6 +45,7 @@ uint64_t calculate_modular_exponentiation(uint64_t base, uint64_t exponent, uint
         {
             R = multiply_and_divide_by_modulus(R, base, modulus);
         }
+        // MISRA-C if - then - else
         else 
         {
             // No action
